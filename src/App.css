@@ -37,8 +37,6 @@ body {
 }
 
 .screen {
-  max-width: 900px;
-  margin: 0 auto;
   background: var(--bg);
   min-height: 100vh;
   display: flex;
@@ -49,7 +47,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 40px;
+  padding: 14px 24px;
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
 }
@@ -69,6 +67,7 @@ body {
 .screen-content {
   padding: 40px 52px;
   flex: 1;
+  max-width: 900px;
 }
 
 .screen-content h2 {
@@ -77,13 +76,14 @@ body {
   letter-spacing: -0.02em;
   line-height: 1.2;
   margin-bottom: 6px;
+  max-width: 640px;
 }
 
 .subtitle {
   font-size: 13px;
   color: var(--secondary);
   line-height: 1.65;
-  max-width: 540px;
+  max-width: 640px;
   margin-bottom: 2.5rem;
 }
 
@@ -92,6 +92,7 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 1rem;
   margin-bottom: 2rem;
+  max-width: 900px;
 }
 
 .prompt-tile {
@@ -230,6 +231,7 @@ select option {
 
 .module-list {
   margin: 1.5rem 0;
+  max-width: 700px;
 }
 
 .module-card {
@@ -293,6 +295,7 @@ select option {
 
 .form-fields {
   margin: 1.5rem 0;
+  max-width: 640px;
 }
 
 .form-field {
@@ -346,6 +349,7 @@ select option {
 
 .results-list {
   margin: 2rem 0;
+  max-width: 700px;
 }
 
 .result-card {
