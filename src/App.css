@@ -83,6 +83,7 @@ body {
 
 .prompt-tile.input-tile {
   background: #f8f9fa;
+  cursor: default;
 }
 
 .prompt-tile-title {
@@ -108,11 +109,15 @@ body {
   font-family: inherit;
   resize: none;
   background: white;
+  pointer-events: auto;
+  z-index: 1;
+  position: relative;
 }
 
 .tile-input:focus {
   outline: none;
   border-color: #2196F3;
+  box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.1);
 }
 
 @media (max-width: 768px) {

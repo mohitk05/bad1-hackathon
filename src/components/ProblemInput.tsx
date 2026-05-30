@@ -51,7 +51,7 @@ export function ProblemInput({ onContinue }: ProblemInputProps) {
             </div>
           ))}
 
-          <div className="prompt-tile input-tile">
+          <div className="prompt-tile input-tile" onClick={(e) => e.stopPropagation()}>
             <div className="prompt-tile-title">Custom Request</div>
             <textarea
               className="tile-input"
@@ -59,6 +59,7 @@ export function ProblemInput({ onContinue }: ProblemInputProps) {
               onChange={(e) => setProblemText(e.target.value)}
               placeholder="Describe your situation..."
               rows={4}
+              onClick={(e) => e.stopPropagation()}
             />
           </div>
         </div>
