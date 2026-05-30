@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder Platform - Process Status</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f1ea;
+      --panel: #fffaf2;
+      --panel-2: #fffdf9;
+      --border: rgba(30, 24, 16, 0.12);
+      --text: #15120e;
+      --muted: #6d6358;
+      --blue: #6d5efc;
+      --green: #0f766e;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      padding: 28px;
+    }
+    main {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      padding: 24px;
+      box-shadow: 0 16px 40px rgba(52, 40, 27, 0.08);
+    }
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      font-size: 0.72rem;
+      margin-bottom: 16px;
+    }
+    h1 {
+      font-size: clamp(2.4rem, 5vw, 4.4rem);
+      line-height: 0.94;
+      letter-spacing: -0.05em;
+      margin-bottom: 16px;
+      max-width: 10ch;
+    }
+    .intro {
+      color: var(--muted);
+      line-height: 1.7;
+      margin-bottom: 22px;
+      max-width: 60ch;
+    }
+    .status-list {
+      display: grid;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px;
+      background: var(--panel-2);
+    }
+    .status-item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 1rem;
+    }
+    .status-item p {
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+    .status-pill {
+      border-radius: 999px;
+      padding: 8px 11px;
+      font-size: 0.72rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      border: 1px solid rgba(74, 222, 128, 0.26);
+      color: var(--green);
+      background: rgba(15, 118, 110, 0.08);
+      white-space: nowrap;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 16px;
+      border-radius: 14px;
+      text-decoration: none;
+      border: 1px solid var(--border);
+      background: #efe7da;
+      color: var(--text);
+      font: inherit;
+      cursor: pointer;
+    }
+    .button.primary {
+      background: var(--blue);
+      color: #fffefb;
+      border-color: transparent;
+      font-weight: 700;
+    }
+    .empty {
+      color: var(--muted);
+      line-height: 1.7;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <section class="panel">
+      <div class="eyebrow">Process Status</div>
+      <h1>Your flow is complete.</h1>
+      <p class="intro" id="introText">
+        Review the status of each module completed in your guided setup flow.
+      </p>
+      <div class="status-list" id="statusList"></div>
+      <p class="empty" id="emptyState" hidden>
+        No completed process was found. Start a new guided flow from the intake page.
+      </p>
+      <div class="actions">
+        <a class="button primary" href="./index.html">Start a new flow</a>
+        <button class="button" id="clearStatusButton" type="button">Clear saved status</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const FLOW_KEY = "founderPlatformFlow";
+    const FLOW_RESULT_KEY = "founderPlatformFlowCompleted";
+    const FLOW_STATUS_KEY = "founderPlatformFlowStatus";
+
+    const statusList = document.getElementById("statusList");
+    const emptyState = document.getElementById("emptyState");
+    const introText = document.getElementById("introText");
+
+    function renderStatus() {
+      const rawStatus = localStorage.getItem(FLOW_STATUS_KEY);
+      if (!rawStatus) {
+        statusList.innerHTML = "";
+        emptyState.hidden = false;
+        introText.textContent = "There is no stored process status yet.";
+        return;
+      }
+
+      try {
+        const data = JSON.parse(rawStatus);
+        const modules = Array.isArray(data.modules) ? data.modules : [];
+        if (!modules.length) {
+          statusList.innerHTML = "";
+          emptyState.hidden = false;
+          introText.textContent = "There is no stored process status yet.";
+          return;
+        }
+
+        emptyState.hidden = true;
+        const completedCount = modules.filter((module) => module.status === "completed").length;
+        introText.textContent = `${completedCount} of ${modules.length} selected modules were completed in the latest guided flow.`;
+        statusList.innerHTML = modules
+          .map(
+            (module) => `
+              <article class="status-item">
+                <div>
+                  <strong>Step ${module.step}: ${module.name}</strong>
+                  <p>${module.detail || "Completed"}</p>
+                </div>
+                <div class="status-pill">${module.status || "completed"}</div>
+              </article>
+            `,
+          )
+          .join("");
+      } catch (error) {
+        statusList.innerHTML = "";
+        emptyState.hidden = false;
+        introText.textContent = "The saved process status could not be read.";
+      }
+    }
+
+    document.getElementById("clearStatusButton").addEventListener("click", () => {
+      localStorage.removeItem(FLOW_KEY);
+      localStorage.removeItem(FLOW_RESULT_KEY);
+      localStorage.removeItem(FLOW_STATUS_KEY);
+      renderStatus();
+    });
+
+    renderStatus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<h2>Module Interface Design</h2>
+<p class="subtitle">This is the contract that each module implements</p>
+
+<div class="mockup">
+  <div class="mockup-header">TypeScript Interface</div>
+  <div class="mockup-body" style="text-align: left; font-family: 'Courier New', monospace; font-size: 0.9rem; padding: 1.5rem;">
+<pre style="margin: 0; line-height: 1.6;">
+interface Module {
+  id: string;
+  name: string;
+  description: string;
+  keywords: string[];
+  requiredInputs: InputField[];
+  execute(inputs: Record&lt;string, any&gt;): Promise&lt;ModuleResult&gt;;
+}
+
+interface InputField {
+  id: string;
+  label: string;
+  type: 'text' | 'file' | 'select' | 'date';
+  required: boolean;
+  options?: string[];
+  placeholder?: string;
+}
+
+interface ModuleResult {
+  success: boolean;
+  message: string;
+  details?: any;
+}
+</pre>
+  </div>
+</div>
+
+<div class="section" style="margin-top: 2rem;">
+  <h3>Example: Housing Module</h3>
+  <div class="mockup">
+    <div class="mockup-body" style="text-align: left; font-family: 'Courier New', monospace; font-size: 0.85rem; padding: 1.5rem;">
+<pre style="margin: 0; line-height: 1.6;">
+const housingModule: Module = {
+  id: 'housing',
+  name: 'Housing',
+  description: 'Find apartments and connect with brokers',
+  keywords: ['apartment', 'housing', 'place to stay', 'flat', 'room'],
+  requiredInputs: [
+    { id: 'budget', label: 'Monthly Budget (€)', type: 'text', required: true },
+    { id: 'moveInDate', label: 'Move-in Date', type: 'date', required: true },
+    { id: 'anmeldung', label: 'Anmeldung Document', type: 'file', required: false }
+  ],
+  execute: async (inputs) => {
+    // Mock: simulate finding brokers
+    return {
+      success: true,
+      message: '3 brokers contacted, 2 apartments matched',
+      details: { brokers: [...], apartments: [...] }
+    };
+  }
+};
+</pre>
+    </div>
+  </div>
+</div>

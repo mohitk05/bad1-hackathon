@@ -1,0 +1,13 @@
+{"type":"server-started","port":51778,"host":"127.0.0.1","url_host":"localhost","url":"http://localhost:51778","screen_dir":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content","state_dir":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/state"}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/initial-modules.html"}
+{"source":"user-event","type":"click","text":"A\n    \n      Banking & Finance\n      Business bank accounts, accounting services, tax advisors","choice":"banking","id":null,"timestamp":1780141517258}
+{"source":"user-event","type":"click","text":"B\n    \n      Visa & Immigration\n      Work permits, residence permits, visa applications","choice":"visa","id":null,"timestamp":1780141565527}
+{"source":"user-event","type":"click","text":"E\n    \n      Networking & Community\n      Founder events, mentorship, investor connections","choice":"networking","id":null,"timestamp":1780141625267}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/user-flow.html"}
+{"source":"user-event","type":"click","text":"B\n    \n      Step-by-Step Wizard\n      One module per screen. User completes Housing fields, clicks Next, then Legal fields, etc. Progress indicator shows completion.\n      \n        Pros: Less overwhelming, clear progress, easier validation\n        Cons: More clicks, can't skip around easily","choice":"wizard","id":null,"timestamp":1780141794254}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/waiting.html"}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/module-interface.html"}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/screen-flow.html"}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/waiting-2.html"}
+{"type":"screen-added","file":"/Users/mkarekar_1/Documents/projects/bad1-hackathon/.superpowers/brainstorm/96346-1780141296/content/waiting-3.html"}
+{"type":"server-stopped","reason":"idle timeout"}

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder Platform - Housing Module</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f1ea;
+      --panel: #fffaf2;
+      --panel-2: #fffdf9;
+      --border: rgba(30, 24, 16, 0.12);
+      --text: #15120e;
+      --muted: #6d6358;
+      --blue: #6d5efc;
+      --green: #0f766e;
+      --amber: #ef6c57;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 28px;
+    }
+    .shell { width: min(1180px, 100%); margin: 0 auto; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 22px; }
+    .panel, .section { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; padding: 22px; }
+    .small-link { display: inline-block; color: var(--muted); text-decoration: none; margin-bottom: 18px; font-size: 0.8rem; }
+    .eyebrow, .section-label { color: var(--blue); text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.72rem; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 14px; max-width: 9ch; }
+    .intro, .copy, .flow-item span, .property p, .summary p { color: var(--muted); line-height: 1.68; }
+    .content { display: grid; gap: 18px; }
+    .flow-list, .property-grid, .prep-list { display: grid; gap: 12px; }
+    .flow-item, .property, .prep, .summary { background: var(--panel-2); border: 1px solid var(--border); border-radius: 18px; padding: 14px; }
+    .flow-item.active, .property.selected { border-color: rgba(74, 222, 128, 0.32); background: rgba(74, 222, 128, 0.06); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+    label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    input, select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fffdfa;
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    .tag { display: inline-block; margin-top: 10px; color: var(--amber); font-size: 0.72rem; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    button { border: none; border-radius: 14px; padding: 12px 16px; font: inherit; cursor: pointer; }
+    .primary { background: var(--blue); color: #fffefb; font-weight: 700; }
+    .secondary { background: #efe7da; color: var(--text); border: 1px solid var(--border); }
+    .summary { display: none; }
+    .summary.visible { display: block; }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="panel">
+      <a class="small-link" href="./index.html">← Back to intake</a>
+      <div class="eyebrow">Module</div>
+      <h1>Housing and relocation landing</h1>
+      <p class="intro">This module simulates apartment search intake, relocation constraints, and housing support recommendations for Berlin.</p>
+      <div class="section-label">Current flow</div>
+      <div class="flow-list" id="flowList"></div>
+      <p class="copy" id="flowStatus"></p>
+    </aside>
+
+    <main class="content">
+      <section class="section">
+        <div class="section-label">Housing intake</div>
+        <p class="copy">Capture budget, timing, and move-in constraints so the platform can recommend the right path.</p>
+        <div class="form-grid">
+          <div>
+            <label for="budget">Monthly budget</label>
+            <input id="budget" placeholder="e.g. 1800 EUR">
+          </div>
+          <div>
+            <label for="size">Household size</label>
+            <select id="size">
+              <option>Solo founder</option>
+              <option>Couple</option>
+              <option>Family</option>
+              <option>Co-living acceptable</option>
+            </select>
+          </div>
+          <div>
+            <label for="district">Preferred district</label>
+            <select id="district">
+              <option>Mitte</option>
+              <option>Friedrichshain</option>
+              <option>Kreuzberg</option>
+              <option>Charlottenburg</option>
+              <option>Flexible across Berlin</option>
+            </select>
+          </div>
+          <div>
+            <label for="movein">Move-in timing</label>
+            <select id="movein">
+              <option>Immediate</option>
+              <option>Within 30 days</option>
+              <option>Within 60 days</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Preparation checklist</div>
+        <div class="prep-list">
+          <div class="prep"><strong>Document bundle</strong><p>Passport, SCHUFA equivalent if available, proof of income, and company documents improve response rates.</p></div>
+          <div class="prep"><strong>Temporary bridge</strong><p>Short-stay housing is often needed before a long-term Berlin lease can be signed.</p></div>
+          <div class="prep"><strong>Founder-specific needs</strong><p>Commute, coworking proximity, and registration suitability matter as much as price.</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Support options</div>
+        <div class="property-grid" id="propertyGrid">
+          <article class="property" data-provider="relocation-agent">
+            <strong>Relocation agent</strong>
+            <p>High-touch support for apartment sourcing, landlord communication, and viewings.</p>
+            <span class="tag">Best for urgent moves</span>
+          </article>
+          <article class="property" data-provider="temporary-housing">
+            <strong>Temporary housing desk</strong>
+            <p>Bridge solution while longer-term registration-friendly housing is being sourced.</p>
+            <span class="tag">Short-term landing</span>
+          </article>
+          <article class="property" data-provider="self-serve">
+            <strong>Self-serve search kit</strong>
+            <p>Checklist, platform list, outreach templates, and document preparation for direct search.</p>
+            <span class="tag">Lean option</span>
+          </article>
+        </div>
+        <div class="actions">
+          <button class="primary" id="completeButton" type="button">Mark module complete and continue</button>
+          <button class="secondary" type="button" onclick="window.location.href='index.html'">Return to intake</button>
+        </div>
+      </section>
+
+      <section class="summary" id="summaryBox">
+        <strong>Housing module complete</strong>
+        <p id="summaryText"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const FLOW_KEY = 'founderPlatformFlow';
+    const FLOW_RESULT_KEY = 'founderPlatformFlowCompleted';
+    const FLOW_STATUS_KEY = 'founderPlatformFlowStatus';
+    const MODULE_ID = 'housing';
+    const MODULES = [
+      { id: 'visa', name: 'Visa', file: 'visa.html' },
+      { id: 'legal', name: 'Legal', file: 'legal.html' },
+      { id: 'banking', name: 'Banking', file: 'banking.html' },
+      { id: 'housing', name: 'Housing', file: 'housing.html' },
+      { id: 'networking', name: 'Networking', file: 'networking.html' }
+    ];
+
+    function loadFlow() {
+      try {
+        return JSON.parse(localStorage.getItem(FLOW_KEY) || 'null');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getFlowModules() {
+      const flow = loadFlow();
+      if (!flow || !Array.isArray(flow.modules) || flow.modules.length === 0) {
+        return [MODULE_ID];
+      }
+      return flow.modules;
+    }
+
+    function updateModuleStatus(detail) {
+      try {
+        const raw = localStorage.getItem(FLOW_STATUS_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data.modules)) return;
+        data.modules = data.modules.map((module) =>
+          module.id === MODULE_ID
+            ? {
+                ...module,
+                status: 'completed',
+                detail,
+              }
+            : module
+        );
+        localStorage.setItem(FLOW_STATUS_KEY, JSON.stringify(data));
+      } catch (error) {
+      }
+    }
+
+    function renderFlow() {
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      document.getElementById('flowList').innerHTML = modules.map((id) => {
+        const module = MODULES.find((entry) => entry.id === id) || { name: id };
+        return `<div class="flow-item ${id === MODULE_ID ? 'active' : ''}"><strong>${module.name}</strong><span>${id === MODULE_ID ? 'Current module' : 'Queued module'}</span></div>`;
+      }).join('');
+      document.getElementById('flowStatus').textContent = currentIndex === -1 ? 'Standalone module' : `Module ${currentIndex + 1} of ${modules.length}`;
+    }
+
+    function completeModule() {
+      const budget = document.getElementById('budget').value.trim() || 'an unspecified budget';
+      const district = document.getElementById('district').value;
+      const provider = document.querySelector('.property.selected');
+      const detail = `Completed for ${budget} with preference for ${district}${provider ? ` and selected ${provider.querySelector('strong').textContent}` : ''}.`;
+      document.getElementById('summaryText').textContent = `Captured housing intake for ${budget} with preference for ${district}. ${provider ? `Support route selected: ${provider.querySelector('strong').textContent}.` : 'No support route selected, so the platform would default to temporary landing support plus search prep.'}`;
+      document.getElementById('summaryBox').classList.add('visible');
+      updateModuleStatus(detail);
+
+      const flow = loadFlow();
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      if (!flow || currentIndex === -1) {
+        return;
+      }
+      const nextId = modules[currentIndex + 1];
+      if (nextId) {
+        const nextModule = MODULES.find((entry) => entry.id === nextId);
+        window.setTimeout(() => { window.location.href = nextModule.file; }, 500);
+        return;
+      }
+      localStorage.removeItem(FLOW_KEY);
+      localStorage.setItem(FLOW_RESULT_KEY, JSON.stringify({ modules }));
+      window.setTimeout(() => { window.location.href = 'status.html'; }, 500);
+    }
+
+    document.querySelectorAll('.property').forEach((card) => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.property').forEach((item) => item.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    document.getElementById('completeButton').addEventListener('click', completeModule);
+    renderFlow();
+  </script>
+</body>
+</html>

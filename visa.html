@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder Platform - Visa Module</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f1ea;
+      --panel: #fffaf2;
+      --panel-2: #fffdf9;
+      --border: rgba(30, 24, 16, 0.12);
+      --text: #15120e;
+      --muted: #6d6358;
+      --blue: #6d5efc;
+      --green: #0f766e;
+      --amber: #ef6c57;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 28px;
+    }
+    .shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 22px;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+      box-shadow: 0 16px 40px rgba(52, 40, 27, 0.08);
+    }
+    .small-link {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.8rem;
+      margin-bottom: 18px;
+    }
+    .eyebrow {
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.72rem;
+      margin-bottom: 14px;
+    }
+    h1 {
+      font-size: clamp(2rem, 4vw, 3.3rem);
+      letter-spacing: -0.04em;
+      line-height: 0.95;
+      margin-bottom: 14px;
+      max-width: 10ch;
+    }
+    .intro, .copy, .item p, .provider p {
+      color: var(--muted);
+      line-height: 1.68;
+    }
+    .intro { margin-bottom: 22px; }
+    .flow-title, .section-label {
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.72rem;
+      margin-bottom: 12px;
+    }
+    .flow-list, .checklist {
+      display: grid;
+      gap: 10px;
+    }
+    .flow-item, .item, .provider, .summary {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      background: var(--panel-2);
+    }
+    .flow-item.active {
+      border-color: rgba(74, 222, 128, 0.34);
+      background: rgba(74, 222, 128, 0.06);
+    }
+    .flow-item strong, .item h3, .provider h3, .summary h2 {
+      display: block;
+      margin-bottom: 6px;
+    }
+    .meta {
+      color: var(--muted);
+      font-size: 0.85rem;
+      margin-top: 14px;
+    }
+    .content-grid {
+      display: grid;
+      gap: 18px;
+    }
+    .section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+    input, select, textarea {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fffdfa;
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+    .provider-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+    .provider.selected {
+      border-color: rgba(125, 211, 252, 0.42);
+      background: rgba(125, 211, 252, 0.06);
+    }
+    .tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      color: var(--amber);
+      margin-top: 10px;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 18px;
+    }
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      font: inherit;
+    }
+    .primary { background: var(--blue); color: #fffefb; font-weight: 700; }
+    .secondary { background: #efe7da; color: var(--text); border: 1px solid var(--border); }
+    .summary { display: none; }
+    .summary.visible { display: block; }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="panel">
+      <a class="small-link" href="./index.html">← Back to intake</a>
+      <div class="eyebrow">Module</div>
+      <h1>Visa and relocation support</h1>
+      <p class="intro">This module simulates intake for residence permits, relocation timing, and trusted immigration providers in Berlin.</p>
+      <div class="flow-title">Current flow</div>
+      <div class="flow-list" id="flowList"></div>
+      <div class="meta" id="flowStatus"></div>
+    </aside>
+
+    <main class="content-grid">
+      <section class="section">
+        <div class="section-label">Intake</div>
+        <p class="copy">Capture the founder's status so the platform can frame the next immigration actions.</p>
+        <div class="form-grid">
+          <div>
+            <label for="nationality">Nationality</label>
+            <input id="nationality" placeholder="e.g. Indian">
+          </div>
+          <div>
+            <label for="timeline">Move timeline</label>
+            <select id="timeline">
+              <option>Within 30 days</option>
+              <option>Within 60 days</option>
+              <option>Within 90 days</option>
+              <option>Already in Berlin</option>
+            </select>
+          </div>
+          <div>
+            <label for="status">Current status</label>
+            <select id="status">
+              <option>No German status yet</option>
+              <option>Tourist / short stay</option>
+              <option>Student / job seeker</option>
+              <option>Existing permit holder</option>
+            </select>
+          </div>
+          <div>
+            <label for="goal">Primary goal</label>
+            <select id="goal">
+              <option>Founder / self-employment visa</option>
+              <option>Freelance permit</option>
+              <option>Blue Card transition</option>
+              <option>Dependent / family route</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Checklist</div>
+        <div class="checklist">
+          <div class="item">
+            <h3>Registration readiness</h3>
+            <p>Berlin address registration, insurance status, and appointment timing need to be aligned early.</p>
+          </div>
+          <div class="item">
+            <h3>Business narrative</h3>
+            <p>The founder visa path typically needs a clear business case, financing explanation, and market relevance.</p>
+          </div>
+          <div class="item">
+            <h3>Document pack</h3>
+            <p>Passport, business plan, CV, proof of funds, and translated supporting materials are usually required.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Provider simulation</div>
+        <p class="copy">Select the provider type the platform should connect to after intake.</p>
+        <div class="provider-grid" id="providerGrid">
+          <article class="provider" data-provider="relocate">
+            <h3>Relocate Berlin</h3>
+            <p>Immigration case management with English-speaking consultants and appointment prep.</p>
+            <span class="tag">Startup founders</span>
+          </article>
+          <article class="provider" data-provider="founder-law">
+            <h3>Founder Immigration Law</h3>
+            <p>Legal-heavy route for complex founder visas, permit changes, and dependents.</p>
+            <span class="tag">Complex cases</span>
+          </article>
+          <article class="provider" data-provider="arrival-desk">
+            <h3>Arrival Desk</h3>
+            <p>Fast relocation support covering Anmeldung, appointments, and translation logistics.</p>
+            <span class="tag">Operational setup</span>
+          </article>
+        </div>
+        <div class="actions">
+          <button class="primary" id="completeButton" type="button">Mark module complete and continue</button>
+          <button class="secondary" type="button" onclick="window.location.href='index.html'">Return to intake</button>
+        </div>
+      </section>
+
+      <section class="summary" id="summaryBox">
+        <h2>Visa module complete</h2>
+        <p class="copy" id="summaryText"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const FLOW_KEY = 'founderPlatformFlow';
+    const FLOW_RESULT_KEY = 'founderPlatformFlowCompleted';
+    const FLOW_STATUS_KEY = 'founderPlatformFlowStatus';
+    const MODULE_ID = 'visa';
+    const MODULES = [
+      { id: 'visa', name: 'Visa', file: 'visa.html' },
+      { id: 'legal', name: 'Legal', file: 'legal.html' },
+      { id: 'banking', name: 'Banking', file: 'banking.html' },
+      { id: 'housing', name: 'Housing', file: 'housing.html' },
+      { id: 'networking', name: 'Networking', file: 'networking.html' }
+    ];
+
+    function loadFlow() {
+      try {
+        return JSON.parse(localStorage.getItem(FLOW_KEY) || 'null');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getFlowModules() {
+      const flow = loadFlow();
+      if (!flow || !Array.isArray(flow.modules) || flow.modules.length === 0) {
+        return [MODULE_ID];
+      }
+      return flow.modules;
+    }
+
+    function updateModuleStatus(detail) {
+      try {
+        const raw = localStorage.getItem(FLOW_STATUS_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data.modules)) return;
+        data.modules = data.modules.map((module) =>
+          module.id === MODULE_ID
+            ? {
+                ...module,
+                status: 'completed',
+                detail,
+              }
+            : module
+        );
+        localStorage.setItem(FLOW_STATUS_KEY, JSON.stringify(data));
+      } catch (error) {
+      }
+    }
+
+    function renderFlow() {
+      const modules = getFlowModules();
+      const flowList = document.getElementById('flowList');
+      const flowStatus = document.getElementById('flowStatus');
+      const currentIndex = modules.indexOf(MODULE_ID);
+      flowList.innerHTML = modules.map((id) => {
+        const module = MODULES.find((entry) => entry.id === id) || { name: id };
+        return `<div class="flow-item ${id === MODULE_ID ? 'active' : ''}"><strong>${module.name}</strong><span>${id === MODULE_ID ? 'Current module' : 'Queued module'}</span></div>`;
+      }).join('');
+      flowStatus.textContent = currentIndex === -1 ? 'Standalone module' : `Module ${currentIndex + 1} of ${modules.length}`;
+    }
+
+    function completeModule() {
+      const nationality = document.getElementById('nationality').value.trim() || 'the founder';
+      const goal = document.getElementById('goal').value;
+      const provider = document.querySelector('.provider.selected');
+      const detail = `Completed for ${nationality} with focus on ${goal}${provider ? ` via ${provider.querySelector('h3').textContent}` : ''}.`;
+      const summaryBox = document.getElementById('summaryBox');
+      document.getElementById('summaryText').textContent = `Captured visa intake for ${nationality} with focus on ${goal}. ${provider ? `Provider route selected: ${provider.querySelector('h3').textContent}.` : 'No provider was selected, so the platform would default to the general immigration support path.'}`;
+      summaryBox.classList.add('visible');
+      updateModuleStatus(detail);
+
+      const flow = loadFlow();
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      if (!flow || currentIndex === -1) {
+        return;
+      }
+      const nextId = modules[currentIndex + 1];
+      if (nextId) {
+        const nextModule = MODULES.find((entry) => entry.id === nextId);
+        window.setTimeout(() => {
+          window.location.href = nextModule.file;
+        }, 500);
+        return;
+      }
+      localStorage.removeItem(FLOW_KEY);
+      localStorage.setItem(FLOW_RESULT_KEY, JSON.stringify({ modules }));
+      window.setTimeout(() => {
+        window.location.href = 'status.html';
+      }, 500);
+    }
+
+    document.querySelectorAll('.provider').forEach((card) => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.provider').forEach((item) => item.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    document.getElementById('completeButton').addEventListener('click', completeModule);
+    renderFlow();
+  </script>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<h2>How should the platform handle the input collection phase?</h2>
+<p class="subtitle">After the user confirms their selected modules, they need to provide specific information. How should this work?</p>
+
+<div class="options">
+  <div class="option" data-choice="single-form" onclick="toggleSelect(this)">
+    <div class="letter">A</div>
+    <div class="content">
+      <h3>Single Combined Form</h3>
+      <p>Show all required fields from all selected modules on one page. User fills everything at once and submits.</p>
+      <div class="pros-cons" style="margin-top: 1rem; font-size: 0.9rem;">
+        <div class="pros"><strong>Pros:</strong> Fast for users who have all info ready</div>
+        <div class="cons"><strong>Cons:</strong> Can be overwhelming if many modules selected</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="wizard" onclick="toggleSelect(this)">
+    <div class="letter">B</div>
+    <div class="content">
+      <h3>Step-by-Step Wizard</h3>
+      <p>One module per screen. User completes Housing fields, clicks Next, then Legal fields, etc. Progress indicator shows completion.</p>
+      <div class="pros-cons" style="margin-top: 1rem; font-size: 0.9rem;">
+        <div class="pros"><strong>Pros:</strong> Less overwhelming, clear progress, easier validation</div>
+        <div class="cons"><strong>Cons:</strong> More clicks, can't skip around easily</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="option" data-choice="accordion" onclick="toggleSelect(this)">
+    <div class="letter">C</div>
+    <div class="content">
+      <h3>Expandable Sections</h3>
+      <p>All modules visible on one page as collapsed sections. User can expand any module, fill it out, collapse it, and move to the next in any order.</p>
+      <div class="pros-cons" style="margin-top: 1rem; font-size: 0.9rem;">
+        <div class="pros"><strong>Pros:</strong> Flexibility, see everything at once, non-linear completion</div>
+        <div class="cons"><strong>Cons:</strong> Less clear what's required, easy to miss sections</div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -2,12 +2,969 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>bad1-hackathon</title>
+    <title>Founder Service Platform</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      :root {
+        --bg: #f5f1ea;
+        --paper: #fffaf2;
+        --paper-2: #fffdf9;
+        --ink: #15120e;
+        --muted: #6d6358;
+        --line: rgba(30, 24, 16, 0.12);
+        --brand: #0f766e;
+        --brand-soft: rgba(15, 118, 110, 0.08);
+        --violet: #6d5efc;
+        --violet-soft: rgba(109, 94, 252, 0.1);
+        --coral: #ef6c57;
+        --coral-soft: rgba(239, 108, 87, 0.1);
+        --accent: #b7791f;
+        --shadow: rgba(52, 40, 27, 0.08);
+      }
+      body {
+        min-height: 100vh;
+        font-family: Inter, "Segoe UI", sans-serif;
+        color: var(--ink);
+        background: var(--bg);
+        padding: 24px;
+      }
+      main {
+        width: min(1120px, 100%);
+        margin: 0 auto;
+      }
+      .eyebrow {
+        color: var(--brand);
+        text-transform: uppercase;
+        letter-spacing: 0.16em;
+        font-size: 0.72rem;
+        margin-bottom: 14px;
+      }
+      .hero {
+        margin-bottom: 18px;
+      }
+      .announce {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1px solid rgba(109, 94, 252, 0.16);
+        background: #eee9ff;
+        color: var(--violet);
+        border-radius: 999px;
+        padding: 8px 12px;
+        font-size: 0.76rem;
+        margin-bottom: 18px;
+      }
+      .announce strong {
+        color: var(--ink);
+      }
+      .panel {
+        background: var(--paper);
+        border: 1px solid var(--line);
+        border-radius: 24px;
+        box-shadow: 0 20px 50px var(--shadow);
+      }
+      .hero-panel {
+        display: grid;
+        grid-template-columns: minmax(0, 1.25fr) 340px;
+        gap: 24px;
+        padding: 30px;
+      }
+      h1 {
+        font-family: Georgia, "Times New Roman", serif;
+        font-size: clamp(3.1rem, 6vw, 6rem);
+        line-height: 0.92;
+        letter-spacing: -0.055em;
+        max-width: 10ch;
+        margin-bottom: 14px;
+      }
+      .intro {
+        max-width: 58ch;
+        color: var(--muted);
+        line-height: 1.68;
+        font-size: 1rem;
+        margin-bottom: 18px;
+      }
+      .hero-cta-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 16px;
+      }
+      .example-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .example-btn {
+        border-radius: 999px;
+        padding: 8px 12px;
+        font: inherit;
+        font-size: 0.84rem;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+        color: var(--muted);
+        transition:
+          transform 140ms ease,
+          border-color 140ms ease,
+          color 140ms ease;
+      }
+      .example-btn:hover {
+        transform: translateY(-1px);
+        border-color: rgba(15, 118, 110, 0.26);
+        color: var(--ink);
+      }
+      .hero-note {
+        display: grid;
+        gap: 14px;
+        align-content: start;
+      }
+      .note-card {
+        background: var(--paper-2);
+        border: 1px solid var(--line);
+        border-radius: 20px;
+        padding: 18px;
+      }
+      .signal-card {
+        background: #ecfaf6;
+      }
+      .signal-card .module-type {
+        margin-bottom: 10px;
+      }
+      .signal-line {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        padding: 10px 0;
+        border-top: 1px solid var(--line);
+      }
+      .signal-line:first-of-type {
+        border-top: none;
+        padding-top: 0;
+      }
+      .signal-line strong {
+        font-size: 0.92rem;
+      }
+      .signal-line span {
+        color: var(--muted);
+        font-size: 0.84rem;
+      }
+      .note-card strong {
+        display: block;
+        font-size: 0.94rem;
+        margin-bottom: 4px;
+      }
+      .note-card p {
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.92rem;
+      }
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.35fr) minmax(300px, 0.85fr);
+        gap: 18px;
+        margin-bottom: 18px;
+      }
+      .intake-panel,
+      .modules-panel,
+      .results {
+        padding: 24px;
+      }
+      .section-title {
+        font-size: 1.18rem;
+        margin-bottom: 6px;
+      }
+      .section-copy {
+        color: var(--muted);
+        line-height: 1.58;
+        margin-bottom: 16px;
+      }
+      .input-footnote {
+        color: var(--muted);
+        font-size: 0.84rem;
+        margin-top: 12px;
+      }
+      textarea {
+        width: 100%;
+        min-height: 220px;
+        resize: vertical;
+        border-radius: 18px;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+        color: var(--ink);
+        padding: 18px;
+        font: inherit;
+        line-height: 1.6;
+        margin-bottom: 14px;
+      }
+      textarea:focus {
+        outline: none;
+        border-color: rgba(15, 118, 110, 0.4);
+        box-shadow: 0 0 0 4px rgba(15, 118, 110, 0.08);
+      }
+      .action-row {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+      .primary-btn,
+      .ghost-btn,
+      .secondary-btn {
+        border-radius: 999px;
+        padding: 11px 16px;
+        font: inherit;
+        cursor: pointer;
+        border: 1px solid var(--line);
+        transition:
+          transform 140ms ease,
+          background 140ms ease,
+          border-color 140ms ease;
+      }
+      .primary-btn {
+        background: var(--ink);
+        color: #fffefb;
+        border-color: transparent;
+        font-weight: 700;
+      }
+      .ghost-btn,
+      .secondary-btn {
+        background: #efe7da;
+        color: var(--ink);
+      }
+      .primary-btn:hover,
+      .ghost-btn:hover,
+      .secondary-btn:hover {
+        transform: translateY(-1px);
+      }
+      .module-grid {
+        display: grid;
+        gap: 10px;
+      }
+      .module-card {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        padding: 15px;
+        background: var(--paper-2);
+        cursor: pointer;
+        transition:
+          border-color 140ms ease,
+          background 140ms ease;
+      }
+      .module-card:hover {
+        border-color: rgba(15, 118, 110, 0.34);
+      }
+      .module-card.selected {
+        border-color: rgba(15, 118, 110, 0.48);
+        background: #eefaf4;
+      }
+      .module-card.recommended {
+        box-shadow: inset 0 0 0 1px rgba(109, 94, 252, 0.14);
+      }
+      .module-type {
+        font-size: 0.68rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: var(--violet);
+        margin-bottom: 7px;
+      }
+      .module-card h3 {
+        margin-bottom: 6px;
+        font-size: 1rem;
+      }
+      .module-card p {
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.92rem;
+        margin-bottom: 10px;
+      }
+      .module-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 0.8rem;
+      }
+      .badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 0.68rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        border-radius: 999px;
+        padding: 6px 10px;
+        border: 1px solid var(--line);
+        color: var(--muted);
+        background: #f7f2e8;
+      }
+      .badge.active {
+        color: var(--violet);
+        border-color: rgba(109, 94, 252, 0.24);
+        background: var(--violet-soft);
+      }
+      .results {
+        display: none;
+      }
+      .results.visible {
+        display: block;
+      }
+      .result-banner {
+        border: 1px solid rgba(109, 94, 252, 0.18);
+        background: #f1eeff;
+        color: var(--ink);
+        border-radius: 18px;
+        padding: 14px 16px;
+        line-height: 1.6;
+        margin-bottom: 14px;
+      }
+      .illustration {
+        position: relative;
+        min-height: 300px;
+        border-radius: 22px;
+        border: 1px solid var(--line);
+        background: #fffdfa;
+        overflow: hidden;
+      }
+      .ill-block {
+        position: absolute;
+        border-radius: 26px;
+      }
+      .ill-one {
+        left: 18px;
+        top: 18px;
+        width: 126px;
+        height: 126px;
+        background: var(--violet);
+      }
+      .ill-two {
+        right: 18px;
+        top: 24px;
+        width: 146px;
+        height: 90px;
+        background: var(--coral);
+      }
+      .ill-three {
+        left: 34px;
+        bottom: 24px;
+        width: 108px;
+        height: 108px;
+        border-radius: 999px;
+        background: var(--brand);
+      }
+      .ill-four {
+        right: 34px;
+        bottom: 28px;
+        width: 164px;
+        height: 118px;
+        background: #ffd457;
+      }
+      .ill-card {
+        position: absolute;
+        left: 102px;
+        top: 104px;
+        width: 176px;
+        padding: 16px;
+        border-radius: 18px;
+        background: #fffaf2;
+        border: 1px solid var(--line);
+        box-shadow: 0 14px 30px var(--shadow);
+      }
+      .ill-card strong {
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.94rem;
+      }
+      .ill-card span {
+        color: var(--muted);
+        font-size: 0.84rem;
+        line-height: 1.45;
+      }
+      .ill-path {
+        position: absolute;
+        left: 76px;
+        top: 84px;
+        width: 184px;
+        height: 170px;
+        border: 3px solid var(--ink);
+        border-color: var(--ink) transparent transparent var(--ink);
+        border-radius: 26px 0 0 0;
+      }
+      .ill-dot {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        background: var(--ink);
+      }
+      .ill-dot.one {
+        left: 68px;
+        top: 76px;
+      }
+      .ill-dot.two {
+        right: 76px;
+        bottom: 74px;
+      }
+      .selected-list {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .selected-item {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: flex-start;
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 14px;
+        background: var(--paper-2);
+      }
+      .selected-item h4 {
+        margin-bottom: 4px;
+        font-size: 1rem;
+      }
+      .selected-item p {
+        color: var(--muted);
+        line-height: 1.5;
+        font-size: 0.92rem;
+      }
+      .selected-order {
+        min-width: 56px;
+        text-align: right;
+        color: var(--coral);
+        font-size: 0.75rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+      }
+      @media (max-width: 920px) {
+        .hero-panel,
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+        .illustration {
+          min-height: 260px;
+        }
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
+    <main>
+      <div class="eyebrow">Founder entry point</div>
+
+      <section class="hero">
+        <div class="panel hero-panel">
+          <div class="hero-copy">
+            <div class="announce">
+              <strong>Guided startup setup</strong
+              ><span>Berlin, without the fragmented process</span>
+            </div>
+            <h1>Starting in Berlin is too hard. We fix that.</h1>
+            <p class="intro">
+              One message in plain language is enough. We turn it into a clear
+              setup path across legal, banking, visa, housing, and founder
+              network support.
+            </p>
+            <div class="hero-cta-row">
+              <button
+                class="primary-btn"
+                type="button"
+                onclick="document.getElementById('problemInput').focus()"
+              >
+                Start with your situation
+              </button>
+              <button
+                class="ghost-btn"
+                type="button"
+                onclick="
+                  document
+                    .getElementById('suggestedModules')
+                    .scrollIntoView({ behavior: 'smooth', block: 'start' })
+                "
+              >
+                See modules first
+              </button>
+            </div>
+            <div class="example-row">
+              <button
+                class="example-btn"
+                type="button"
+                data-example="I moved to Berlin and need help with my visa, company registration, and opening a business bank account."
+              >
+                Visa + company setup
+              </button>
+              <button
+                class="example-btn"
+                type="button"
+                data-example="I already registered the company but still need housing and a stronger founder network in Berlin."
+              >
+                Housing + founder network
+              </button>
+              <button
+                class="example-btn"
+                type="button"
+                data-example="I want to start a UG, need a bank account, and I do not know what legal steps come first."
+              >
+                UG + banking + legal
+              </button>
+            </div>
+          </div>
+          <aside class="hero-note">
+            <div class="note-card signal-card">
+              <div class="module-type">How it feels</div>
+              <div class="signal-line">
+                <div>
+                  <strong>One message</strong>
+                  <span>You explain the problem once.</span>
+                </div>
+              </div>
+              <div class="signal-line">
+                <div>
+                  <strong>Smart sequence</strong>
+                  <span>Modules are ordered automatically.</span>
+                </div>
+              </div>
+              <div class="signal-line">
+                <div>
+                  <strong>Visible progress</strong>
+                  <span>You always know what is done.</span>
+                </div>
+              </div>
+            </div>
+            <div class="note-card">
+              <strong>Built for unclear situations</strong>
+              <p>
+                You do not need to know which service comes first. That is the
+                point of the flow.
+              </p>
+            </div>
+            <div class="illustration" aria-hidden="true">
+              <div class="ill-block ill-one"></div>
+              <div class="ill-block ill-two"></div>
+              <div class="ill-block ill-three"></div>
+              <div class="ill-block ill-four"></div>
+              <div class="ill-path"></div>
+              <div class="ill-dot one"></div>
+              <div class="ill-dot two"></div>
+              <div class="ill-card">
+                <strong>Problem in. Route out.</strong>
+                <span
+                  >We translate a messy founder situation into a clear sequence
+                  of actions.</span
+                >
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel intake-panel">
+          <h2 class="section-title">Tell us what is blocking you</h2>
+          <p class="section-copy">
+            Write it the way you would explain it to a helpful operator. We will
+            sort the modules and turn it into a usable flow.
+          </p>
+          <textarea
+            id="problemInput"
+            placeholder="I moved to Berlin, need to register my company, open a business account, understand my visa path, and find somewhere to live before I can start operating."
+          ></textarea>
+          <div class="action-row">
+            <button class="primary-btn" id="analyzeButton" type="button">
+              Build my flow
+            </button>
+            <button class="ghost-btn" id="resetButton" type="button">
+              Clear
+            </button>
+          </div>
+          <div class="input-footnote">
+            Best results come from mentioning what you already tried, what is
+            urgent, and what is blocking launch.
+          </div>
+        </div>
+
+        <div class="panel modules-panel">
+          <h2 class="section-title">Modules</h2>
+          <p class="section-copy">
+            Select modules yourself or let the platform recommend them from the
+            message.
+          </p>
+          <div class="module-grid" id="suggestedModules"></div>
+        </div>
+      </section>
+
+      <section class="panel results" id="resultsPanel">
+        <h2 class="section-title">Recommended sequence</h2>
+        <div class="result-banner" id="resultBanner"></div>
+        <div class="selected-list" id="selectedList"></div>
+        <div class="action-row">
+          <button class="primary-btn" id="confirmButton" type="button">
+            Confirm and start flow
+          </button>
+          <button class="secondary-btn" id="reanalyzeButton" type="button">
+            Rebuild sequence
+          </button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const FLOW_KEY = "founderPlatformFlow";
+      const FLOW_STATUS_KEY = "founderPlatformFlowStatus";
+      const MODULES = [
+        {
+          id: "visa",
+          name: "Visa",
+          file: "visa.html",
+          category: "Mobility",
+          eta: "10 min intake",
+          description:
+            "Residence permit, relocation timeline, and immigration support matching.",
+          reasons: {
+            visa: "Mentions visa or residence permit needs.",
+            residence: "Mentions residence or relocation administration.",
+            anmeldung: "Mentions registration requirements in Berlin.",
+            move: "Mentions relocating to Berlin from abroad.",
+            relocation: "Mentions relocation support.",
+            permit: "Mentions permits or immigration paperwork.",
+          },
+          keywords: [
+            "visa",
+            "residence",
+            "anmeldung",
+            "move",
+            "relocation",
+            "permit",
+            "immigration",
+          ],
+        },
+        {
+          id: "legal",
+          name: "Legal",
+          file: "legal.html",
+          category: "Company setup",
+          eta: "15 min walkthrough",
+          description:
+            "Company formation, notary, tax registration, and legal onboarding for Germany.",
+          reasons: {
+            company: "Mentions company formation or registration.",
+            register: "Mentions company registration steps.",
+            legal: "Mentions legal setup needs.",
+            notary: "Mentions notary or incorporation paperwork.",
+            ug: "Mentions UG formation.",
+            gmbh: "Mentions GmbH formation.",
+            startup: "General startup setup usually requires a legal module.",
+          },
+          keywords: [
+            "company",
+            "register",
+            "legal",
+            "notary",
+            "ug",
+            "gmbh",
+            "startup",
+            "incorporate",
+          ],
+        },
+        {
+          id: "banking",
+          name: "Banking",
+          file: "banking.html",
+          category: "Finance",
+          eta: "8 min intake",
+          description:
+            "Business bank account setup, capital deposit readiness, and provider shortlisting.",
+          reasons: {
+            bank: "Mentions bank or account setup.",
+            iban: "Mentions IBAN or payment infrastructure.",
+            account: "Mentions opening an account.",
+            capital: "Mentions share capital deposit needs.",
+            payment: "Mentions payments or collecting money.",
+          },
+          keywords: [
+            "bank",
+            "iban",
+            "account",
+            "capital",
+            "payment",
+            "payments",
+          ],
+        },
+        {
+          id: "housing",
+          name: "Housing",
+          file: "housing.html",
+          category: "Relocation",
+          eta: "7 min intake",
+          description:
+            "Apartment search support, readiness checklist, and trusted relocation partners.",
+          reasons: {
+            housing: "Mentions housing needs.",
+            apartment: "Mentions apartment search.",
+            flat: "Mentions flat hunting.",
+            rent: "Mentions renting in Berlin.",
+            landlord: "Mentions landlord communication.",
+          },
+          keywords: [
+            "housing",
+            "apartment",
+            "flat",
+            "rent",
+            "landlord",
+            "accommodation",
+          ],
+        },
+        {
+          id: "networking",
+          name: "Networking",
+          file: "networking.html",
+          category: "Community",
+          eta: "6 min intake",
+          description:
+            "Founder communities, ecosystem events, and relevant introductions in Berlin.",
+          reasons: {
+            network: "Mentions networking or meeting people.",
+            community: "Mentions founder community access.",
+            investors: "Mentions meeting investors.",
+            mentor: "Mentions mentors or support network.",
+            cofounder: "Mentions finding a cofounder.",
+            events: "Mentions events or meetups.",
+          },
+          keywords: [
+            "network",
+            "community",
+            "investors",
+            "mentor",
+            "cofounder",
+            "events",
+            "meetup",
+          ],
+        },
+      ];
+
+      const moduleById = Object.fromEntries(
+        MODULES.map((module) => [module.id, module]),
+      );
+      const selection = new Set(["legal", "banking", "visa"]);
+      const recommended = new Set();
+
+      const problemInput = document.getElementById("problemInput");
+      const suggestedModules = document.getElementById("suggestedModules");
+      const resultsPanel = document.getElementById("resultsPanel");
+      const resultBanner = document.getElementById("resultBanner");
+      const selectedList = document.getElementById("selectedList");
+
+      function renderSuggestedModules() {
+        suggestedModules.innerHTML = MODULES.map((module) => {
+          const selectedClass = selection.has(module.id) ? "selected" : "";
+          const recommendedClass = recommended.has(module.id)
+            ? "recommended"
+            : "";
+          const badgeClass = selection.has(module.id)
+            ? "badge active"
+            : "badge";
+          const badgeLabel = selection.has(module.id) ? "Selected" : "Optional";
+          return `
+          <article class="module-card ${selectedClass} ${recommendedClass}" data-module-id="${module.id}">
+            <div class="module-type">${module.category}</div>
+            <h3>${module.name}</h3>
+            <p>${module.description}</p>
+            <div class="module-meta">
+              <span>${module.eta}</span>
+              <span class="${badgeClass}">${badgeLabel}</span>
+            </div>
+          </article>
+        `;
+        }).join("");
+
+        suggestedModules.querySelectorAll(".module-card").forEach((card) => {
+          card.addEventListener("click", () => {
+            const { moduleId } = card.dataset;
+            if (selection.has(moduleId)) {
+              selection.delete(moduleId);
+            } else {
+              selection.add(moduleId);
+            }
+            renderSuggestedModules();
+            renderResults("Manual selection updated.");
+          });
+        });
+      }
+
+      function countKeywordHits(text, keyword) {
+        if (!text.includes(keyword)) {
+          return 0;
+        }
+        return text.split(keyword).length - 1;
+      }
+
+      function inferModules() {
+        const text = problemInput.value.trim().toLowerCase();
+        const matches = MODULES.map((module) => {
+          const reasons = [];
+          let score = 0;
+          module.keywords.forEach((keyword) => {
+            const hits = countKeywordHits(text, keyword);
+            if (hits > 0) {
+              score += hits;
+              reasons.push(module.reasons[keyword] || `Mentions ${keyword}.`);
+            }
+          });
+          if (
+            module.id === "legal" &&
+            text &&
+            /(founder|startup|company|incorporat|register)/.test(text) &&
+            !/already registered|already incorporated|already have my startup registered/.test(
+              text,
+            )
+          ) {
+            score += 1;
+            reasons.push(
+              "General founder setup in Berlin usually starts with the legal path.",
+            );
+          }
+          if (
+            module.id === "visa" &&
+            /from abroad|non[- ]eu|move to berlin|relocat/.test(text)
+          ) {
+            score += 2;
+            reasons.push(
+              "Relocation from abroad implies immigration and residency steps.",
+            );
+          }
+          return { module, score, reasons: [...new Set(reasons)] };
+        });
+
+        const selectedFromText = matches
+          .filter((entry) => entry.score > 0)
+          .sort((a, b) => b.score - a.score)
+          .map((entry) => entry.module.id);
+
+        if (selectedFromText.length === 0) {
+          selectedFromText.push("legal", "banking");
+        }
+
+        selection.clear();
+        recommended.clear();
+        selectedFromText.forEach((id) => {
+          selection.add(id);
+          recommended.add(id);
+        });
+
+        renderSuggestedModules();
+        renderResults(
+          "The natural-language request was interpreted into the following module sequence.",
+          matches,
+        );
+      }
+
+      function getOrderedSelection(matches) {
+        const order = ["visa", "legal", "banking", "housing", "networking"];
+        return order
+          .filter((id) => selection.has(id))
+          .map((id) => {
+            const match = matches
+              ? matches.find((entry) => entry.module.id === id)
+              : null;
+            return {
+              module: moduleById[id],
+              reasons:
+                match && match.reasons.length
+                  ? match.reasons
+                  : ["Selected manually by the user."],
+            };
+          });
+      }
+
+      function renderResults(message, matches = null) {
+        const orderedSelection = getOrderedSelection(matches);
+        if (orderedSelection.length === 0) {
+          resultsPanel.classList.remove("visible");
+          return;
+        }
+        resultBanner.textContent = `${message} ${orderedSelection.length} module${orderedSelection.length === 1 ? "" : "s"} selected.`;
+        selectedList.innerHTML = orderedSelection
+          .map(
+            (entry, index) => `
+        <article class="selected-item">
+          <div>
+            <h4>${entry.module.name}</h4>
+            <p>${entry.reasons[0]}</p>
+          </div>
+          <div class="selected-order">Step ${index + 1}</div>
+        </article>
+      `,
+          )
+          .join("");
+        resultsPanel.classList.add("visible");
+      }
+
+      function resetFlowBuilder() {
+        problemInput.value = "";
+        selection.clear();
+        recommended.clear();
+        ["legal", "banking", "visa"].forEach((id) => selection.add(id));
+        resultsPanel.classList.remove("visible");
+        renderSuggestedModules();
+      }
+
+      function startConfirmedFlow() {
+        const ordered = getOrderedSelection().map((entry) => entry.module.id);
+        if (!ordered.length) {
+          return;
+        }
+        const payload = {
+          input: problemInput.value.trim(),
+          modules: ordered,
+          startedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(FLOW_KEY, JSON.stringify(payload));
+        localStorage.removeItem("founderPlatformFlowCompleted");
+        localStorage.setItem(
+          FLOW_STATUS_KEY,
+          JSON.stringify({
+            modules: ordered.map((id, index) => ({
+              id,
+              name: moduleById[id].name,
+              step: index + 1,
+              status: "pending",
+              detail: "Waiting to start",
+            })),
+          }),
+        );
+        window.location.href = moduleById[ordered[0]].file;
+      }
+
+      document
+        .getElementById("analyzeButton")
+        .addEventListener("click", inferModules);
+      document
+        .getElementById("confirmButton")
+        .addEventListener("click", startConfirmedFlow);
+      document
+        .getElementById("reanalyzeButton")
+        .addEventListener("click", inferModules);
+      document
+        .getElementById("resetButton")
+        .addEventListener("click", resetFlowBuilder);
+
+      document.querySelectorAll(".example-btn").forEach((button) => {
+        button.addEventListener("click", () => {
+          document
+            .getElementById("problemInput")
+            .scrollIntoView({ behavior: "smooth", block: "center" });
+          problemInput.value = button.dataset.example;
+          inferModules();
+        });
+      });
+
+      renderSuggestedModules();
+    </script>
   </body>
 </html>

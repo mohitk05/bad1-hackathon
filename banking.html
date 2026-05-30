@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder Platform - Banking Module</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f1ea;
+      --panel: #fffaf2;
+      --panel-2: #fffdf9;
+      --border: rgba(30, 24, 16, 0.12);
+      --text: #15120e;
+      --muted: #6d6358;
+      --blue: #6d5efc;
+      --green: #0f766e;
+      --amber: #ef6c57;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 28px;
+    }
+    .shell {
+      width: min(1180px, 100%);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 22px;
+    }
+    .panel, .section {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      padding: 22px;
+    }
+    .small-link { display: inline-block; color: var(--muted); text-decoration: none; margin-bottom: 18px; font-size: 0.8rem; }
+    .eyebrow, .section-label { color: var(--blue); text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.72rem; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 14px; max-width: 10ch; }
+    .intro, .copy, .card p, .flow-item span, .summary p { color: var(--muted); line-height: 1.68; }
+    .flow-list, .card-grid, .need-list { display: grid; gap: 12px; }
+    .flow-item, .card, .need, .summary {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 14px;
+      background: var(--panel-2);
+    }
+    .flow-item.active, .card.selected {
+      border-color: rgba(74, 222, 128, 0.32);
+      background: rgba(74, 222, 128, 0.06);
+    }
+    .content { display: grid; gap: 18px; }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+    label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    input, select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fffdfa;
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    button { border: none; border-radius: 14px; padding: 12px 16px; font: inherit; cursor: pointer; }
+    .primary { background: var(--blue); color: #fffefb; font-weight: 700; }
+    .secondary { background: #efe7da; color: var(--text); border: 1px solid var(--border); }
+    .tag { display: inline-block; margin-top: 10px; color: var(--amber); font-size: 0.72rem; }
+    .summary { display: none; }
+    .summary.visible { display: block; }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="panel">
+      <a class="small-link" href="./index.html">← Back to intake</a>
+      <div class="eyebrow">Module</div>
+      <h1>Banking and capital readiness</h1>
+      <p class="intro">This module simulates business account setup, capital deposit readiness, and provider matching for Berlin founders.</p>
+      <div class="section-label">Current flow</div>
+      <div class="flow-list" id="flowList"></div>
+      <p class="copy" id="flowStatus"></p>
+    </aside>
+
+    <main class="content">
+      <section class="section">
+        <div class="section-label">Banking intake</div>
+        <p class="copy">Collect the information needed to shortlist the best business bank path.</p>
+        <div class="form-grid">
+          <div>
+            <label for="entity">Planned company type</label>
+            <select id="entity">
+              <option>UG</option>
+              <option>GmbH</option>
+              <option>Freelance / sole proprietor</option>
+            </select>
+          </div>
+          <div>
+            <label for="capital">Capital amount</label>
+            <input id="capital" placeholder="e.g. 25000">
+          </div>
+          <div>
+            <label for="residency">Founder residency</label>
+            <select id="residency">
+              <option>Non-EU founder</option>
+              <option>EU founder</option>
+              <option>Already resident in Germany</option>
+            </select>
+          </div>
+          <div>
+            <label for="urgency">Urgency</label>
+            <select id="urgency">
+              <option>Need account this week</option>
+              <option>Within two weeks</option>
+              <option>Planning ahead</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">What the platform checks</div>
+        <div class="need-list">
+          <div class="need"><strong>KYC fit</strong><p>Whether the provider is realistic for foreign founders and remote identity verification.</p></div>
+          <div class="need"><strong>Capital deposit path</strong><p>Whether the account works for notary-linked company formation and capital confirmation.</p></div>
+          <div class="need"><strong>Operational banking</strong><p>IBAN issuance, cards, approvals, and accounting integrations for early-stage teams.</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Provider shortlist</div>
+        <div class="card-grid" id="providerGrid">
+          <article class="card" data-provider="finom">
+            <strong>Finom</strong>
+            <p>Fast online setup and common choice for foreign founders needing quick activation.</p>
+            <span class="tag">Remote-friendly</span>
+          </article>
+          <article class="card" data-provider="penta">
+            <strong>Penta</strong>
+            <p>Strong startup positioning with bookkeeping integrations and simple onboarding.</p>
+            <span class="tag">Operations-first</span>
+          </article>
+          <article class="card" data-provider="db">
+            <strong>Traditional branch bank</strong>
+            <p>Higher credibility for some counterparties, but usually slower and stricter for foreign founders.</p>
+            <span class="tag">Conservative route</span>
+          </article>
+        </div>
+        <div class="actions">
+          <button class="primary" id="completeButton" type="button">Mark module complete and continue</button>
+          <button class="secondary" type="button" onclick="window.location.href='index.html'">Return to intake</button>
+        </div>
+      </section>
+
+      <section class="summary" id="summaryBox">
+        <strong>Banking module complete</strong>
+        <p id="summaryText"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const FLOW_KEY = 'founderPlatformFlow';
+    const FLOW_RESULT_KEY = 'founderPlatformFlowCompleted';
+    const FLOW_STATUS_KEY = 'founderPlatformFlowStatus';
+    const MODULE_ID = 'banking';
+    const MODULES = [
+      { id: 'visa', name: 'Visa', file: 'visa.html' },
+      { id: 'legal', name: 'Legal', file: 'legal.html' },
+      { id: 'banking', name: 'Banking', file: 'banking.html' },
+      { id: 'housing', name: 'Housing', file: 'housing.html' },
+      { id: 'networking', name: 'Networking', file: 'networking.html' }
+    ];
+
+    function loadFlow() {
+      try {
+        return JSON.parse(localStorage.getItem(FLOW_KEY) || 'null');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getFlowModules() {
+      const flow = loadFlow();
+      if (!flow || !Array.isArray(flow.modules) || flow.modules.length === 0) {
+        return [MODULE_ID];
+      }
+      return flow.modules;
+    }
+
+    function updateModuleStatus(detail) {
+      try {
+        const raw = localStorage.getItem(FLOW_STATUS_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data.modules)) return;
+        data.modules = data.modules.map((module) =>
+          module.id === MODULE_ID
+            ? {
+                ...module,
+                status: 'completed',
+                detail,
+              }
+            : module
+        );
+        localStorage.setItem(FLOW_STATUS_KEY, JSON.stringify(data));
+      } catch (error) {
+      }
+    }
+
+    function renderFlow() {
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      document.getElementById('flowList').innerHTML = modules.map((id) => {
+        const module = MODULES.find((entry) => entry.id === id) || { name: id };
+        return `<div class="flow-item ${id === MODULE_ID ? 'active' : ''}"><strong>${module.name}</strong><span>${id === MODULE_ID ? 'Current module' : 'Queued module'}</span></div>`;
+      }).join('');
+      document.getElementById('flowStatus').textContent = currentIndex === -1 ? 'Standalone module' : `Module ${currentIndex + 1} of ${modules.length}`;
+    }
+
+    function completeModule() {
+      const entity = document.getElementById('entity').value;
+      const capital = document.getElementById('capital').value.trim() || 'unspecified capital';
+      const provider = document.querySelector('.card.selected');
+      const detail = `Completed for ${entity} with ${capital}${provider ? ` and shortlisted ${provider.querySelector('strong').textContent}` : ''}.`;
+      document.getElementById('summaryText').textContent = `Captured banking intake for ${entity} with ${capital}. ${provider ? `Shortlisted provider: ${provider.querySelector('strong').textContent}.` : 'No provider selected, so the platform would present a mixed shortlist.'}`;
+      document.getElementById('summaryBox').classList.add('visible');
+      updateModuleStatus(detail);
+
+      const flow = loadFlow();
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      if (!flow || currentIndex === -1) {
+        return;
+      }
+      const nextId = modules[currentIndex + 1];
+      if (nextId) {
+        const nextModule = MODULES.find((entry) => entry.id === nextId);
+        window.setTimeout(() => { window.location.href = nextModule.file; }, 500);
+        return;
+      }
+      localStorage.removeItem(FLOW_KEY);
+      localStorage.setItem(FLOW_RESULT_KEY, JSON.stringify({ modules }));
+      window.setTimeout(() => { window.location.href = 'status.html'; }, 500);
+    }
+
+    document.querySelectorAll('.card').forEach((card) => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.card').forEach((item) => item.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    document.getElementById('completeButton').addEventListener('click', completeModule);
+    renderFlow();
+  </script>
+</body>
+</html>

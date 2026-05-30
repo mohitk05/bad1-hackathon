@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Founder Platform - Networking Module</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #f5f1ea;
+      --panel: #fffaf2;
+      --panel-2: #fffdf9;
+      --border: rgba(30, 24, 16, 0.12);
+      --text: #15120e;
+      --muted: #6d6358;
+      --blue: #6d5efc;
+      --green: #0f766e;
+      --amber: #ef6c57;
+    }
+    body {
+      min-height: 100vh;
+      font-family: Inter, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 28px;
+    }
+    .shell { width: min(1180px, 100%); margin: 0 auto; display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 22px; }
+    .panel, .section { background: var(--panel); border: 1px solid var(--border); border-radius: 24px; padding: 22px; }
+    .small-link { display: inline-block; color: var(--muted); text-decoration: none; margin-bottom: 18px; font-size: 0.8rem; }
+    .eyebrow, .section-label { color: var(--blue); text-transform: uppercase; letter-spacing: 0.16em; font-size: 0.72rem; margin-bottom: 12px; }
+    h1 { font-size: clamp(2rem, 4vw, 3.2rem); line-height: 0.95; letter-spacing: -0.04em; margin-bottom: 14px; max-width: 9ch; }
+    .intro, .copy, .flow-item span, .community p, .summary p { color: var(--muted); line-height: 1.68; }
+    .content { display: grid; gap: 18px; }
+    .flow-list, .community-grid, .value-list { display: grid; gap: 12px; }
+    .flow-item, .community, .value, .summary { background: var(--panel-2); border: 1px solid var(--border); border-radius: 18px; padding: 14px; }
+    .flow-item.active, .community.selected { border-color: rgba(74, 222, 128, 0.32); background: rgba(74, 222, 128, 0.06); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 16px; }
+    label { display: block; margin-bottom: 8px; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+    textarea, select {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fffdfa;
+      color: var(--text);
+      padding: 12px 14px;
+      font: inherit;
+    }
+    textarea { min-height: 110px; resize: vertical; }
+    .tag { display: inline-block; margin-top: 10px; color: var(--amber); font-size: 0.72rem; }
+    .actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 18px; }
+    button { border: none; border-radius: 14px; padding: 12px 16px; font: inherit; cursor: pointer; }
+    .primary { background: var(--blue); color: #fffefb; font-weight: 700; }
+    .secondary { background: #efe7da; color: var(--text); border: 1px solid var(--border); }
+    .summary { display: none; }
+    .summary.visible { display: block; }
+    @media (max-width: 920px) {
+      .shell { grid-template-columns: 1fr; }
+      .form-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="panel">
+      <a class="small-link" href="./index.html">← Back to intake</a>
+      <div class="eyebrow">Module</div>
+      <h1>Networking and ecosystem access</h1>
+      <p class="intro">This module simulates founder-network matching, relevant communities, and warm-introduction priorities in Berlin.</p>
+      <div class="section-label">Current flow</div>
+      <div class="flow-list" id="flowList"></div>
+      <p class="copy" id="flowStatus"></p>
+    </aside>
+
+    <main class="content">
+      <section class="section">
+        <div class="section-label">Founder context</div>
+        <p class="copy">Capture what kind of people, events, and opportunities the founder actually needs.</p>
+        <div class="form-grid">
+          <div>
+            <label for="focus">Primary networking goal</label>
+            <select id="focus">
+              <option>Meet founders</option>
+              <option>Meet investors</option>
+              <option>Find advisors</option>
+              <option>Find hiring leads</option>
+            </select>
+          </div>
+          <div>
+            <label for="stage">Startup stage</label>
+            <select id="stage">
+              <option>Idea stage</option>
+              <option>Early traction</option>
+              <option>Raising capital</option>
+              <option>Scaling team</option>
+            </select>
+          </div>
+          <div style="grid-column: 1 / -1;">
+            <label for="intro">Short founder intro</label>
+            <textarea id="intro" placeholder="Describe the founder, startup, and what kind of introductions would be useful."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">What the module outputs</div>
+        <div class="value-list">
+          <div class="value"><strong>Event path</strong><p>Which meetups, demo days, and ecosystem gatherings are worth the founder's time.</p></div>
+          <div class="value"><strong>Community fit</strong><p>Which founder groups are strongest for the startup stage and language needs.</p></div>
+          <div class="value"><strong>Warm-intro priority</strong><p>What kind of people should be introduced first: peers, investors, operators, or specialists.</p></div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-label">Community routes</div>
+        <div class="community-grid" id="communityGrid">
+          <article class="community" data-provider="operator-circle">
+            <strong>Operator circle</strong>
+            <p>Best for practical founder connections, peer problem solving, and operator intros.</p>
+            <span class="tag">Execution-focused</span>
+          </article>
+          <article class="community" data-provider="investor-room">
+            <strong>Investor room</strong>
+            <p>Curated event path for early conversations with angels, micro funds, and scouts.</p>
+            <span class="tag">Fundraising-focused</span>
+          </article>
+          <article class="community" data-provider="international-founders">
+            <strong>International founders group</strong>
+            <p>Best for newcomers navigating Berlin while building local support and visibility.</p>
+            <span class="tag">Soft landing</span>
+          </article>
+        </div>
+        <div class="actions">
+          <button class="primary" id="completeButton" type="button">Mark module complete and continue</button>
+          <button class="secondary" type="button" onclick="window.location.href='index.html'">Return to intake</button>
+        </div>
+      </section>
+
+      <section class="summary" id="summaryBox">
+        <strong>Networking module complete</strong>
+        <p id="summaryText"></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const FLOW_KEY = 'founderPlatformFlow';
+    const FLOW_RESULT_KEY = 'founderPlatformFlowCompleted';
+    const FLOW_STATUS_KEY = 'founderPlatformFlowStatus';
+    const MODULE_ID = 'networking';
+    const MODULES = [
+      { id: 'visa', name: 'Visa', file: 'visa.html' },
+      { id: 'legal', name: 'Legal', file: 'legal.html' },
+      { id: 'banking', name: 'Banking', file: 'banking.html' },
+      { id: 'housing', name: 'Housing', file: 'housing.html' },
+      { id: 'networking', name: 'Networking', file: 'networking.html' }
+    ];
+
+    function loadFlow() {
+      try {
+        return JSON.parse(localStorage.getItem(FLOW_KEY) || 'null');
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getFlowModules() {
+      const flow = loadFlow();
+      if (!flow || !Array.isArray(flow.modules) || flow.modules.length === 0) {
+        return [MODULE_ID];
+      }
+      return flow.modules;
+    }
+
+    function updateModuleStatus(detail) {
+      try {
+        const raw = localStorage.getItem(FLOW_STATUS_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (!Array.isArray(data.modules)) return;
+        data.modules = data.modules.map((module) =>
+          module.id === MODULE_ID
+            ? {
+                ...module,
+                status: 'completed',
+                detail,
+              }
+            : module
+        );
+        localStorage.setItem(FLOW_STATUS_KEY, JSON.stringify(data));
+      } catch (error) {
+      }
+    }
+
+    function renderFlow() {
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      document.getElementById('flowList').innerHTML = modules.map((id) => {
+        const module = MODULES.find((entry) => entry.id === id) || { name: id };
+        return `<div class="flow-item ${id === MODULE_ID ? 'active' : ''}"><strong>${module.name}</strong><span>${id === MODULE_ID ? 'Current module' : 'Queued module'}</span></div>`;
+      }).join('');
+      document.getElementById('flowStatus').textContent = currentIndex === -1 ? 'Standalone module' : `Module ${currentIndex + 1} of ${modules.length}`;
+    }
+
+    function completeModule() {
+      const focus = document.getElementById('focus').value;
+      const intro = document.getElementById('intro').value.trim() || 'No founder intro was entered.';
+      const provider = document.querySelector('.community.selected');
+      const detail = `Completed with focus on ${focus}${provider ? ` via ${provider.querySelector('strong').textContent}` : ''}.`;
+      document.getElementById('summaryText').textContent = `Captured networking request with focus on ${focus}. ${provider ? `Selected community route: ${provider.querySelector('strong').textContent}.` : 'No community route selected, so the platform would default to the international founders group.'} Founder intro: ${intro}`;
+      document.getElementById('summaryBox').classList.add('visible');
+      updateModuleStatus(detail);
+
+      const flow = loadFlow();
+      const modules = getFlowModules();
+      const currentIndex = modules.indexOf(MODULE_ID);
+      if (!flow || currentIndex === -1) {
+        return;
+      }
+      const nextId = modules[currentIndex + 1];
+      if (nextId) {
+        const nextModule = MODULES.find((entry) => entry.id === nextId);
+        window.setTimeout(() => { window.location.href = nextModule.file; }, 500);
+        return;
+      }
+      localStorage.removeItem(FLOW_KEY);
+      localStorage.setItem(FLOW_RESULT_KEY, JSON.stringify({ modules }));
+      window.setTimeout(() => { window.location.href = 'status.html'; }, 500);
+    }
+
+    document.querySelectorAll('.community').forEach((card) => {
+      card.addEventListener('click', () => {
+        document.querySelectorAll('.community').forEach((item) => item.classList.remove('selected'));
+        card.classList.add('selected');
+      });
+    });
+
+    document.getElementById('completeButton').addEventListener('click', completeModule);
+    renderFlow();
+  </script>
+</body>
+</html>
