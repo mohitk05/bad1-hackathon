@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GründerBox — Legal</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0d0d0d;--surface:#161616;--surface2:#1e1e1e;--border:#252525;
+  --text:#f0f0f0;--muted:#5a5a5a;--secondary:#888;
+  --green:#4ade80;--blue:#60a5fa;--amber:#fbbf24;--gray:#6b7280;
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+/* TOP BAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);letter-spacing:.08em}
+.logo span{color:var(--text)}
+.prog-wrap{display:flex;align-items:center;gap:10px}
+.prog-track{width:160px;height:1px;background:var(--border)}
+.prog-fill{height:100%;background:var(--green);transition:width .4s ease}
+.prog-label{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+
+/* LAYOUT */
+.main{display:flex;flex:1;overflow:hidden}
+
+/* RAIL */
+.rail{width:268px;border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0;padding:20px 12px}
+.rail-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;padding:0 8px;margin-bottom:12px}
+.step-item{display:flex;align-items:center;gap:10px;padding:9px 8px;border-radius:6px;cursor:pointer;transition:background .12s,opacity .12s;margin-bottom:2px}
+.step-item:hover:not(.locked){background:var(--surface)}
+.step-item.active{background:var(--surface2)}
+.step-item.locked{opacity:.28;cursor:not-allowed}
+.step-num{width:22px;height:22px;border-radius:50%;background:transparent;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:9px;flex-shrink:0;color:var(--muted);transition:all .15s}
+.step-item.active .step-num{border-color:var(--text);color:var(--text)}
+.step-item.done .step-num{background:var(--green);border-color:var(--green);color:#000;font-size:10px}
+.step-info{flex:1;min-width:0}
+.step-name{font-size:12px;font-weight:500;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:color .12s}
+.step-item.active .step-name,.step-item.done .step-name{color:var(--text)}
+.step-tag{font-size:9px;font-family:'JetBrains Mono',monospace;padding:1px 5px;border-radius:2px;margin-top:3px;display:inline-block;letter-spacing:.04em}
+.ta{background:rgba(74,222,128,.08);color:var(--green)}
+.tm{background:rgba(96,165,250,.08);color:var(--blue)}
+.tp{background:rgba(251,191,36,.08);color:var(--amber)}
+.ti{background:rgba(107,114,128,.08);color:var(--gray)}
+
+/* PARALLEL GROUP IN RAIL */
+.pgroup{margin:4px 0;border-left:1px solid var(--border);padding-left:6px;margin-left:10px}
+.pgroup-label{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;padding:4px 8px 4px 8px;opacity:.6}
+
+/* CONTENT */
+.content{flex:1;overflow-y:auto;padding:40px 52px}
+.step-header{margin-bottom:28px}
+.badge{font-family:'JetBrains Mono',monospace;font-size:10px;padding:3px 8px;border-radius:3px;letter-spacing:.06em;display:inline-block;margin-bottom:10px}
+.step-title{font-size:26px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.step-desc{font-size:13px;color:var(--secondary);line-height:1.65;max-width:540px;margin-top:6px}
+.parallel-notice{display:inline-flex;align-items:center;gap:6px;background:rgba(96,165,250,.06);border:1px solid rgba(96,165,250,.12);border-radius:4px;padding:5px 10px;font-size:10px;color:var(--blue);font-family:'JetBrains Mono',monospace;letter-spacing:.04em;margin-top:12px}
+
+/* LOCKED STATE */
+.locked-screen{display:flex;flex-direction:column;align-items:center;justify-content:center;height:55%;text-align:center;gap:14px}
+.locked-circle{width:44px;height:44px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:18px}
+
+/* FORMS */
+.fg{margin-bottom:18px}
+label{display:block;font-size:10px;color:var(--muted);margin-bottom:7px;letter-spacing:.08em;text-transform:uppercase;font-family:'JetBrains Mono',monospace}
+input[type=text],input[type=number],textarea,select{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:9px 12px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;outline:none;transition:border-color .15s;resize:none}
+input:focus,textarea:focus,select:focus{border-color:#383838}
+select option{background:var(--surface)}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* RADIO */
+.rgroup{display:flex;flex-direction:column;gap:7px}
+.roption{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border:1px solid var(--border);border-radius:5px;cursor:pointer;transition:border-color .15s,background .15s}
+.roption:hover{border-color:#383838;background:var(--surface)}
+.roption.sel{border-color:var(--green);background:rgba(74,222,128,.04)}
+.rdot{width:14px;height:14px;border-radius:50%;border:1px solid var(--border);flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s}
+.roption.sel .rdot{border-color:var(--green);background:var(--green)}
+.roption.sel .rdot::after{content:'';width:5px;height:5px;border-radius:50%;background:#000}
+.rtext strong{display:block;font-size:12px;font-weight:500;margin-bottom:1px}
+.rtext span{font-size:11px;color:var(--muted)}
+
+/* BUTTONS */
+.btn{padding:9px 18px;border-radius:5px;font-size:12px;font-weight:500;cursor:pointer;border:none;transition:opacity .15s,transform .1s;font-family:'Inter',sans-serif}
+.btn:active{transform:scale(.98)}
+.btn-p{background:var(--text);color:#000}
+.btn-s{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-g{background:var(--green);color:#000}
+.btn:hover{opacity:.82}
+.actions{display:flex;gap:10px;margin-top:28px}
+
+/* BOXES */
+.rbox{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:18px;margin-top:20px}
+.rbox.ok{border-color:rgba(74,222,128,.2);background:rgba(74,222,128,.03)}
+.rbox-label{font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:10px;letter-spacing:.06em}
+.infobox{background:var(--surface);border:1px solid var(--border);border-left:2px solid var(--gray);border-radius:5px;padding:12px 14px;font-size:12px;color:var(--secondary);line-height:1.65}
+
+/* PROVIDER CARDS */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(185px,1fr));gap:10px;margin-top:20px}
+.pcard{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:14px;cursor:pointer;transition:border-color .15s,transform .12s}
+.pcard:hover{border-color:#383838;transform:translateY(-1px)}
+.pcard.sel{border-color:var(--blue);background:rgba(96,165,250,.04)}
+.pname{font-size:13px;font-weight:600;margin-bottom:3px}
+.pmeta{font-size:11px;color:var(--muted);line-height:1.5}
+.ptag{display:inline-block;font-size:9px;padding:2px 5px;border-radius:2px;margin-top:8px;background:rgba(96,165,250,.08);color:var(--blue);font-family:'JetBrains Mono',monospace;letter-spacing:.04em}
+
+/* DOCUMENT */
+.docpre{background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:20px;margin-top:20px;font-family:'JetBrains Mono',monospace;font-size:11px;line-height:1.9;color:var(--secondary);max-height:260px;overflow-y:auto}
+.hl{color:var(--green)}
+
+/* STATS */
+.statrow{display:flex;gap:10px;margin-top:16px}
+.stat{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:5px;padding:10px 14px}
+.slabel{font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin-bottom:3px}
+.sval{font-size:18px;font-weight:600}
+
+/* TIMELINE */
+.timeline{margin-top:24px}
+.titem{display:flex;gap:14px;padding-bottom:20px;position:relative}
+.titem:not(:last-child)::before{content:'';position:absolute;left:10px;top:22px;bottom:0;width:1px;background:var(--border)}
+.tdot{width:22px;height:22px;border-radius:50%;background:var(--surface2);border:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:9px;font-family:'JetBrains Mono',monospace;color:var(--muted)}
+.tcontent strong{display:block;font-size:13px;font-weight:500;margin-bottom:2px}
+.tcontent p{font-size:11px;color:var(--muted);line-height:1.5}
+
+/* RECOMMENDATION */
+.rec{background:rgba(74,222,128,.04);border:1px solid rgba(74,222,128,.15);border-radius:7px;padding:18px;margin-top:20px}
+.rec-type{font-size:22px;font-weight:700;color:var(--green);margin-bottom:6px}
+.rec-row{display:flex;gap:8px;margin-bottom:3px;font-size:12px;color:var(--secondary)}
+.rec-arrow{color:var(--green)}
+
+/* PREFILL TABLE */
+.ptable{display:grid;grid-template-columns:180px 1fr;gap:6px 14px;line-height:1.9;font-size:12px}
+.pk{color:var(--muted)}
+.pv{color:var(--green)}
+.pw{color:var(--amber)}
+
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.hidden{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">GRÜNDERBOX / <span>LEGAL MODULE</span></div>
+  <div class="prog-wrap">
+    <div class="prog-track"><div class="prog-fill" id="pf" style="width:0%"></div></div>
+    <div class="prog-label" id="pl">0 / 9 complete</div>
+  </div>
+</div>
+
+<div class="main">
+  <div class="rail" id="rail"></div>
+  <div class="content" id="content"></div>
+</div>
+
+<script>
+/* ── Step definitions with dependency + parallel metadata ── */
+const STEPS = [
+  { name:'Company Type',       tag:'ta', tagl:'RECOMMEND',      deps:[],    parallel:null, title:'Choose your company type',        desc:'Three questions. We tell you exactly which structure fits your situation — and why.' },
+  { name:'Articles of Assoc.', tag:'ta', tagl:'AUTO-GENERATE',  deps:[0],   parallel:null, title:'Articles of association',         desc:'We generate your Gesellschaftsvertrag using the official Musterprotokoll, pre-filled with your details.' },
+  { name:'Bank Account',       tag:'tm', tagl:'PROVIDER MATCH', deps:[1],   parallel:null, title:'Open a business bank account',   desc:'You must deposit share capital before the notary appointment. We surface banks that work for non-EU founders.' },
+  { name:'Notary',             tag:'tm', tagl:'PROVIDER MATCH', deps:[1,2], parallel:4,    title:'Book a notary',                  desc:'Notarisation is mandatory in Germany. We match you with notaries experienced with foreign founders.' },
+  { name:'Translator',         tag:'tm', tagl:'PROVIDER MATCH', deps:[1,2], parallel:3,    title:'Certified translator',           desc:'Non-EU founders need a sworn interpreter at the notary appointment. Book this alongside your notary.' },
+  { name:'Handelsregister',    tag:'ti', tagl:'INFO',           deps:[3,4], parallel:null, title:'Commercial register',            desc:'Your notary handles this. Your company is legally born when it appears here. Nothing you need to do.' },
+  { name:'Gewerbeanmeldung',   tag:'tp', tagl:'PRE-FILL',       deps:[5],   parallel:7,    title:'Trade registration',             desc:'Required for most commercial activity. We pre-fill your form from everything you\'ve already told us.' },
+  { name:'Finanzamt',          tag:'tp', tagl:'PRE-FILL',       deps:[5],   parallel:6,    title:'Tax office registration',        desc:'30+ question form. We fill 28 of them. You review two fields and download — ready to submit.' },
+  { name:'Tax Advisor',        tag:'tm', tagl:'PROVIDER MATCH', deps:[5],   parallel:null, title:'Connect with a Steuerberater',  desc:'German tax law has strict deadlines. We connect you with English-speaking advisors who work with startups.' },
+];
+
+/* Pairs that should be shown grouped in the rail */
+const PARALLEL_PAIRS = [[3,4],[6,7]];
+
+/* Render functions in step-index order */
+const renders = [renderCompanyType,renderArticles,renderBank,renderNotary,renderTranslator,renderHandelsregister,renderGewerbe,renderFinanzamt,renderSteuerberater];
+
+let cur = 0;
+const done = new Set();
+const D = {};
+
+function isLocked(i){ return STEPS[i].deps.some(d => !done.has(d)); }
+
+function init(){ renderRail(); renderStep(0); }
+
+/* ── Rail ── */
+function renderRail(){
+  const skip = new Set();
+  let html = `<div class="rail-label" style="padding:0 8px;margin-bottom:12px">Your journey</div>`;
+  for(let i=0;i<STEPS.length;i++){
+    if(skip.has(i)) continue;
+    const pair = PARALLEL_PAIRS.find(p=>p[0]===i);
+    if(pair){
+      html += `<div class="pgroup"><div class="pgroup-label">⇄ do simultaneously</div>${pair.map(j=>{skip.add(j);return stepItem(j);}).join('')}</div>`;
+    } else {
+      html += stepItem(i);
+    }
+  }
+  document.getElementById('rail').innerHTML = html;
+  const pct = (done.size/STEPS.length)*100;
+  document.getElementById('pf').style.width = pct+'%';
+  document.getElementById('pl').textContent = `${done.size} / ${STEPS.length} complete`;
+}
+
+function stepItem(i){
+  const s=STEPS[i], locked=isLocked(i);
+  return `<div class="step-item ${i===cur?'active':''} ${done.has(i)?'done':''} ${locked?'locked':''}" onclick="go(${i})">
+    <div class="step-num">${done.has(i)?'✓':(i+1)}</div>
+    <div class="step-info">
+      <div class="step-name">${s.name}</div>
+      <span class="step-tag ${s.tag}">${s.tagl}</span>
+    </div>
+  </div>`;
+}
+
+/* ── Navigation ── */
+function go(i){
+  cur=i;
+  renderRail();
+  if(isLocked(i)){ showLocked(i); return; }
+  renderStep(i);
+  document.getElementById('content').scrollTop=0;
+}
+
+function advance(){
+  done.add(cur);
+  let next=cur+1;
+  while(next<STEPS.length && isLocked(next)) next++;
+  if(next<STEPS.length) cur=next;
+  renderRail();
+  if(isLocked(cur)) showLocked(cur); else renderStep(cur);
+  document.getElementById('content').scrollTop=0;
+}
+
+function showLocked(i){
+  const blockers = STEPS[i].deps.filter(d=>!done.has(d));
+  const names = blockers.map(d=>`"${STEPS[d].name}"`);
+  const msg = names.length===1 ? names[0] : names.slice(0,-1).join(', ')+' and '+names.slice(-1);
+  const goTo = blockers[0];
+  document.getElementById('content').innerHTML=`
+    <div class="locked-screen">
+      <div class="locked-circle">○</div>
+      <div style="font-size:16px;font-weight:600">Step locked</div>
+      <div style="font-size:13px;color:var(--secondary);max-width:300px;line-height:1.6">Complete ${msg} first to unlock this step.</div>
+      <button class="btn btn-s" style="margin-top:4px" onclick="go(${goTo})">Go to ${STEPS[goTo].name} →</button>
+    </div>`;
+}
+
+function renderStep(i){
+  const s=STEPS[i];
+  const pn = s.parallel!==null
+    ? `<div class="parallel-notice">⇄ &nbsp;Book this alongside "${STEPS[s.parallel].name}"</div>`
+    : '';
+  document.getElementById('content').innerHTML=`
+    <div class="step-header">
+      <span class="badge ${s.tag}">${s.tagl}</span>
+      <div class="step-title">${s.title}</div>
+      <div class="step-desc">${s.desc}</div>
+      ${pn}
+    </div>
+    <div id="body"></div>`;
+  renders[i](document.getElementById('body'));
+}
+
+/* ── STEP 0: Company Type ── */
+function renderCompanyType(el){
+  el.innerHTML=`
+    <div class="fg"><label>How much capital can you invest upfront?</label>
+      <div class="rgroup">
+        <div class="roption" onclick="pick(this,'capital','low')"><div class="rdot"></div><div class="rtext"><strong>Under €25,000</strong><span>Bootstrapping or starting lean</span></div></div>
+        <div class="roption" onclick="pick(this,'capital','high')"><div class="rdot"></div><div class="rtext"><strong>€25,000 or more</strong><span>Ready to put in full GmbH capital</span></div></div>
+      </div>
+    </div>
+    <div class="fg"><label>Do you plan to raise from investors?</label>
+      <div class="rgroup">
+        <div class="roption" onclick="pick(this,'investors','yes')"><div class="rdot"></div><div class="rtext"><strong>Yes</strong><span>VC, angels, or institutional</span></div></div>
+        <div class="roption" onclick="pick(this,'investors','no')"><div class="rdot"></div><div class="rtext"><strong>No</strong><span>Bootstrapped or revenue-funded</span></div></div>
+      </div>
+    </div>
+    <div class="fg"><label>Solo founder or co-founders?</label>
+      <div class="rgroup">
+        <div class="roption" onclick="pick(this,'solo','yes')"><div class="rdot"></div><div class="rtext"><strong>Solo</strong><span>Just me</span></div></div>
+        <div class="roption" onclick="pick(this,'solo','no')"><div class="rdot"></div><div class="rtext"><strong>Co-founders</strong><span>Two or more founders</span></div></div>
+      </div>
+    </div>
+    <div id="typeResult" class="hidden"></div>`;
+}
+
+function pick(el,k,v){
+  el.parentElement.querySelectorAll('.roption').forEach(e=>e.classList.remove('sel'));
+  el.classList.add('sel'); D[k]=v;
+  if(D.capital&&D.investors&&D.solo) genType();
+}
+
+function genType(){
+  if(!D.capital||!D.investors||!D.solo) return;
+  let type,reasons;
+  if(D.investors==='yes'||D.capital==='high'){
+    type='GmbH'; reasons=['Investors expect this structure','€25,000 capital signals commitment','More credible with banks and enterprise clients','Standard for venture-backed companies'];
+  } else {
+    type='UG (haftungsbeschränkt)'; reasons=['Start with as little as €1','Same liability protection as GmbH','Can convert to GmbH later when profitable','Fastest and cheapest formation process'];
+  }
+  D.companyType=type;
+  document.getElementById('typeResult').innerHTML=`
+    <div class="rec">
+      <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);margin-bottom:6px;letter-spacing:.06em">RECOMMENDATION</div>
+      <div class="rec-type">${type}</div>
+      ${reasons.map(r=>`<div class="rec-row"><span class="rec-arrow">→</span><span>${r}</span></div>`).join('')}
+    </div>
+    <div class="actions">
+      <button class="btn btn-g" onclick="advance()">Confirm & continue →</button>
+      <button class="btn btn-s" onclick="renderCompanyType(document.getElementById('body'))">Change answers</button>
+    </div>`;
+  document.getElementById('typeResult').classList.remove('hidden');
+}
+
+/* ── STEP 1: Articles ── */
+function renderArticles(el){
+  el.innerHTML=`
+    <div class="frow">
+      <div class="fg"><label>Company name</label><input type="text" id="cname" placeholder="e.g. Acme Solutions" value="${D.companyName||''}"></div>
+      <div class="fg"><label>Share capital (€)</label><input type="number" id="ccap" placeholder="${D.companyType==='GmbH'?'25000':'1'}" value="${D.shareCapital||''}"></div>
+    </div>
+    <div class="fg"><label>Business purpose</label><textarea id="cpurp" rows="2" placeholder="e.g. Development and sale of software products and consulting services">${D.businessPurpose||''}</textarea></div>
+    <div class="fg"><label>Registered address in Germany</label><input type="text" id="caddr" placeholder="e.g. Musterstraße 1, 10115 Berlin" value="${D.companyAddress||''}"></div>
+    <div id="artResult" class="hidden"></div>
+    <div class="actions"><button class="btn btn-p" onclick="genArticles()">Generate document →</button></div>`;
+}
+
+function genArticles(){
+  const n=document.getElementById('cname').value,c=document.getElementById('ccap').value,
+        p=document.getElementById('cpurp').value,a=document.getElementById('caddr').value;
+  if(!n||!c||!p||!a){alert('Please fill in all fields.');return;}
+  D.companyName=n;D.shareCapital=c;D.businessPurpose=p;D.companyAddress=a;
+  const t=D.companyType||'UG (haftungsbeschränkt)';
+  const sfx=t==='GmbH'?'GmbH':'UG (haftungsbeschränkt)';
+  document.getElementById('artResult').innerHTML=`
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;margin-bottom:10px">
+      <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em">GENERATED — GESELLSCHAFTSVERTRAG</div>
+      <button class="btn btn-s" style="font-size:11px;padding:5px 10px" onclick="alert('Downloading PDF…')">↓ Download PDF</button>
+    </div>
+    <div class="docpre">
+§ 1 &nbsp;Firma und Sitz<br>
+Die Gesellschaft führt die Firma <span class="hl">${n} ${sfx}</span>.<br>
+Der Sitz der Gesellschaft ist <span class="hl">${a}</span>.<br><br>
+§ 2 &nbsp;Gegenstand des Unternehmens<br>
+Gegenstand des Unternehmens ist: <span class="hl">${p}</span>.<br><br>
+§ 3 &nbsp;Stammkapital<br>
+Das Stammkapital beträgt <span class="hl">€ ${parseFloat(c).toLocaleString('de-DE')}</span>.<br>
+Die Einlage ist vollständig in bar zu erbringen.<br><br>
+§ 4 &nbsp;Geschäftsführung<br>
+Die Gesellschaft hat einen oder mehrere Geschäftsführer.<br>
+Ist nur ein Geschäftsführer bestellt, vertritt er die Gesellschaft allein.<br><br>
+§ 5 &nbsp;Gesellschafterbeschlüsse<br>
+Gesellschafterbeschlüsse werden in Versammlungen oder schriftlich gefasst.<br><br>
+§ 6 &nbsp;Jahresabschluss<br>
+Der Geschäftsführer stellt den Jahresabschluss innerhalb von drei Monaten<br>
+nach Ende des Geschäftsjahres auf.<br><br>
+<span style="color:var(--muted)">— Musterprotokoll (§ 2 Abs. 1a GmbHG) — ready for notary —</span>
+    </div>
+    <div class="actions"><button class="btn btn-g" onclick="advance()">Confirm & continue →</button></div>`;
+  document.getElementById('artResult').classList.remove('hidden');
+}
+
+/* ── STEP 2: Bank Account ── */
+function renderBank(el){
+  el.innerHTML=`
+    <div class="infobox">You need to deposit share capital and get a bank confirmation letter <strong>before</strong> the notary appointment. Traditional German banks often reject non-EU founders. These options work reliably.</div>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin:20px 0 10px">RECOMMENDED FOR NON-EU FOUNDERS</div>
+    <div class="pgrid">
+      ${[
+        {name:'Finom',         type:'Online · No branch visit',note:'Non-resident friendly.<br>No German ID required.<br>IBAN issued in 48hrs.',   rating:'★★★★★',col:'var(--green)'},
+        {name:'Penta',         type:'Online · English support',note:'Popular with Berlin startups.<br>Accounting integrations built in.',           rating:'★★★★☆',col:'var(--green)'},
+        {name:'Deutsche Bank', type:'Traditional · In-person', note:'Requires branch visit + German address.<br>High credibility with partners.',   rating:'★★★☆☆',col:'var(--amber)'},
+      ].map(b=>`
+        <div class="pcard" onclick="selProv(this,'bk')">
+          <div class="pname">${b.name}</div>
+          <div class="pmeta" style="margin-bottom:4px">${b.type}</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">${b.note}</div>
+          <div style="font-size:12px;color:${b.col}">${b.rating}</div>
+        </div>`).join('')}
+    </div>
+    <div id="bkConf" class="hidden"></div>`;
+}
+
+/* ── STEP 3: Notary ── */
+function renderNotary(el){
+  el.innerHTML=`
+    <div class="frow">
+      <div class="fg"><label>Preferred language</label>
+        <select id="nlang"><option>English</option><option>Hindi</option><option>Arabic</option><option>Mandarin</option><option>Spanish</option></select>
+      </div>
+      <div class="fg"><label>Your Berlin district</label>
+        <select id="ndistr"><option>Mitte</option><option>Prenzlauer Berg</option><option>Kreuzberg</option><option>Friedrichshain</option><option>Charlottenburg</option></select>
+      </div>
+    </div>
+    <div class="actions" style="margin-top:8px"><button class="btn btn-p" onclick="showNotaries()">Find notaries →</button></div>
+    <div id="notResult" class="hidden"></div>`;
+}
+
+function showNotaries(){
+  document.getElementById('notResult').innerHTML=`
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin:20px 0 10px">3 NOTARIES MATCHED</div>
+    <div class="pgrid">
+      ${[
+        {name:'Dr. Klaus Weber',    loc:'Mitte',           note:'Foreign founder specialist.<br>200+ non-EU companies formed.',avail:'Available in 5 days'},
+        {name:'Notariat Bergmann',  loc:'Prenzlauer Berg', note:'English-speaking team.<br>Startup-friendly fees.',           avail:'Available in 9 days'},
+        {name:'Dr. Elke Schreiber', loc:'Charlottenburg',  note:'GmbH & UG specialist.<br>Fast turnaround guaranteed.',       avail:'Available in 11 days'},
+      ].map(n=>`
+        <div class="pcard" onclick="selProv(this,'not')">
+          <div class="pname">${n.name}</div>
+          <div class="pmeta">${n.loc}<br>${n.note}<br><br><span style="color:var(--green);font-size:10px">${n.avail}</span></div>
+          <span class="ptag">NON-EU OK</span>
+        </div>`).join('')}
+    </div>
+    <div id="notConf" class="hidden"></div>`;
+  document.getElementById('notResult').classList.remove('hidden');
+}
+
+/* ── STEP 4: Translator ── */
+function renderTranslator(el){
+  el.innerHTML=`
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px">
+      <div class="infobox" style="flex:1;margin:0">Non-EU founders must have a court-sworn (beeidigt) interpreter present at the notary appointment — or submit certified translations of all documents.</div>
+      <button class="btn btn-s" style="white-space:nowrap;flex-shrink:0" onclick="advance()">Skip — I'm EU →</button>
+    </div>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin-bottom:10px">CERTIFIED TRANSLATORS — BERLIN</div>
+    <div class="pgrid">
+      ${[
+        {name:'Maria Santos',    langs:'EN · ES · PT',note:'Court-certified.<br>Same-day bookings available.',    rate:'€80 / session'},
+        {name:'Amir Hosseini',   langs:'EN · AR · FA',note:'Court-certified.<br>Works with tech founders.',       rate:'€90 / session'},
+        {name:'Lin Translations',langs:'EN · ZH · JA',note:'Court-certified.<br>48hr advance booking required.', rate:'€100 / session'},
+      ].map(t=>`
+        <div class="pcard" onclick="selProv(this,'tr')">
+          <div class="pname">${t.name}</div>
+          <div class="pmeta">${t.langs}<br>${t.note}<br><br><span style="color:var(--green);font-size:10px">${t.rate}</span></div>
+          <span class="ptag">SWORN TRANSLATOR</span>
+        </div>`).join('')}
+    </div>
+    <div id="trConf" class="hidden"></div>`;
+}
+
+/* ── STEP 5: Handelsregister ── */
+function renderHandelsregister(el){
+  el.innerHTML=`
+    <div class="infobox">You don't do anything here. Your notary submits the Handelsregisteranmeldung on your behalf. Your company is legally born the moment it appears in this register.</div>
+    <div class="timeline">
+      <div class="titem"><div class="tdot">1</div><div class="tcontent"><strong>Notary submits the application</strong><p>Happens on the day of your notary appointment. No action from you.</p></div></div>
+      <div class="titem"><div class="tdot">2</div><div class="tcontent"><strong>Amtsgericht Berlin reviews documents</strong><p>Court verifies articles and your capital deposit confirmation.</p></div></div>
+      <div class="titem"><div class="tdot" style="background:rgba(74,222,128,.08);border-color:var(--green);color:var(--green)">✓</div><div class="tcontent"><strong>Company appears in the Handelsregister</strong><p>Your company legally exists. You receive a Handelsregisterauszug (registration extract).</p></div></div>
+    </div>
+    <div class="statrow">
+      <div class="stat"><div class="slabel">TIMELINE</div><div class="sval">2–6 wks</div></div>
+      <div class="stat"><div class="slabel">COURT FEE</div><div class="sval">~€150</div></div>
+      <div class="stat"><div class="slabel">ACTION FROM YOU</div><div class="sval" style="font-size:13px;padding-top:4px">None</div></div>
+    </div>
+    <div class="actions"><button class="btn btn-g" onclick="advance()">Got it, continue →</button></div>`;
+}
+
+/* ── STEP 6: Gewerbeanmeldung ── */
+function renderGewerbe(el){
+  const n=D.companyName||'[Company name]',a=D.companyAddress||'[Address]',
+        p=D.businessPurpose||'[Business purpose]',t=D.companyType||'UG (haftungsbeschränkt)';
+  el.innerHTML=`
+    <div class="infobox">Required for most commercial activities. ~€30 fee. We pre-fill using everything you've told us — review and submit.</div>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin:20px 0 10px">PRE-FILLED — GEWERBEANMELDUNG</div>
+    <div class="docpre" style="font-family:'Inter',sans-serif;font-size:12px">
+      <div class="ptable">
+        <span class="pk">Firmenbezeichnung</span><span class="pv">${n} ${t==='GmbH'?'GmbH':'UG (haftungsbeschränkt)'}</span>
+        <span class="pk">Geschäftsadresse</span><span class="pv">${a}</span>
+        <span class="pk">Unternehmensgegenstand</span><span class="pv">${p}</span>
+        <span class="pk">Rechtsform</span><span class="pv">${t}</span>
+        <span class="pk">Gewerbebeginn</span><span class="pv">${new Date().toLocaleDateString('de-DE')}</span>
+        <span class="pk">Betriebsart</span><span class="pv">Hauptbetrieb</span>
+        <span class="pk">Beschäftigte</span><span class="pv">0 (Gründungsphase)</span>
+      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-p" onclick="alert('Opening Berlin Gewerbeamt portal with pre-filled data…')">Open Gewerbeamt portal ↗</button>
+      <button class="btn btn-g" onclick="advance()">Mark as done →</button>
+    </div>`;
+}
+
+/* ── STEP 7: Finanzamt ── */
+function renderFinanzamt(el){
+  const n=D.companyName||'[Company name]',a=D.companyAddress||'[Address]',
+        p=D.businessPurpose||'[Business purpose]',c=D.shareCapital||'—',t=D.companyType||'UG';
+  el.innerHTML=`
+    <div class="infobox">The Fragebogen zur steuerlichen Erfassung has 30+ questions. We pre-fill 28. You only need to provide two things.</div>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin:20px 0 10px">PRE-FILLED — FRAGEBOGEN ZUR STEUERLICHEN ERFASSUNG</div>
+    <div class="docpre" style="font-family:'Inter',sans-serif;font-size:12px">
+      <div class="ptable">
+        <span class="pk">1. Unternehmensform</span><span class="pv">${t}</span>
+        <span class="pk">2. Firmenbezeichnung</span><span class="pv">${n}</span>
+        <span class="pk">3. Geschäftsanschrift</span><span class="pv">${a}</span>
+        <span class="pk">4. Tätigkeitsbeginn</span><span class="pv">${new Date().toLocaleDateString('de-DE')}</span>
+        <span class="pk">5. Unternehmensgegenstand</span><span class="pv">${p}</span>
+        <span class="pk">6. Stammkapital</span><span class="pv">€ ${c}</span>
+        <span class="pk">7. Umsatzsteuer-Option</span><span class="pw">⚠ Your input needed</span>
+        <span class="pk">8. Bankverbindung (IBAN)</span><span class="pw">⚠ Your input needed</span>
+        <span class="pk">9–30. Weitere Angaben</span><span class="pv">Pre-filled from your data</span>
+      </div>
+    </div>
+    <div class="fg" style="margin-top:18px">
+      <label>VAT option — Kleinunternehmerregelung?</label>
+      <select><option>Yes — under €22,000 revenue year 1 (no VAT charged)</option><option>No — I will charge and reclaim VAT</option></select>
+    </div>
+    <div class="fg">
+      <label>Business IBAN</label>
+      <input type="text" placeholder="DE89 3704 0044 0532 0130 00">
+    </div>
+    <div class="actions">
+      <button class="btn btn-p" onclick="alert('Downloading pre-filled PDF…')">↓ Download pre-filled PDF</button>
+      <button class="btn btn-g" onclick="advance()">Mark as done →</button>
+    </div>`;
+}
+
+/* ── STEP 8: Steuerberater ── */
+function renderSteuerberater(el){
+  el.innerHTML=`
+    <div class="infobox">A Steuerberater is not legally required but strongly recommended. German tax deadlines are strict. A good advisor pays for themselves in avoided penalties.</div>
+    <div style="font-size:10px;font-family:'JetBrains Mono',monospace;color:var(--muted);letter-spacing:.06em;margin:20px 0 10px">ENGLISH-SPEAKING · STARTUP-FOCUSED · BERLIN</div>
+    <div class="pgrid">
+      ${[
+        {name:'Taxise Berlin',    spec:'Startup specialist',  note:'Works with 200+ foreign-founded startups.<br>Fully remote friendly.',    price:'From €150 / mo'},
+        {name:'Dr. Mia Hoffmann', spec:'Independent advisor', note:'Former startup CFO.<br>Deep UG & GmbH expertise.',                      price:'From €180 / mo'},
+        {name:'StartupTax GmbH',  spec:'Boutique firm',       note:'Handles Finanzamt registration for you.<br>Flat monthly pricing.',       price:'From €120 / mo'},
+      ].map(s=>`
+        <div class="pcard" onclick="selProv(this,'st')">
+          <div class="pname">${s.name}</div>
+          <div class="pmeta" style="margin-bottom:4px">${s.spec}</div>
+          <div style="font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:8px">${s.note}</div>
+          <div style="font-size:12px;color:var(--green)">${s.price}</div>
+        </div>`).join('')}
+    </div>
+    <div id="stConf" class="hidden"></div>`;
+}
+
+/* ── Shared provider select + book ── */
+function selProv(el,prefix){
+  el.parentElement.querySelectorAll('.pcard').forEach(c=>c.classList.remove('sel'));
+  el.classList.add('sel');
+  const conf=document.getElementById(prefix+'Conf');
+  conf.innerHTML=`<div class="actions"><button class="btn btn-g" onclick="book('${prefix}')">Request appointment →</button></div>`;
+  conf.classList.remove('hidden');
+}
+function book(prefix){
+  document.getElementById(prefix+'Conf').innerHTML=`
+    <div class="rbox ok" style="margin-top:16px">
+      <div class="rbox-label">✓ APPOINTMENT REQUESTED</div>
+      <div style="font-size:12px;color:var(--secondary)">Your details have been sent. Expect a confirmation within 24 hours.</div>
+    </div>
+    <div class="actions"><button class="btn btn-g" onclick="advance()">Continue →</button></div>`;
+}
+
+init();
+</script>
+</body>
+</html>

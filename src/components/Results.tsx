@@ -16,7 +16,7 @@ export function Results({ results, onDone }: ResultsProps) {
   return (
     <div className="screen">
       <div className="screen-header">
-        <h1>FounderHub Berlin</h1>
+        <h1>GRÜNDERBOX / <span>PLATFORM</span></h1>
       </div>
       <div className="screen-content">
         <h2 className={allSuccess ? 'success-header' : 'error-header'}>

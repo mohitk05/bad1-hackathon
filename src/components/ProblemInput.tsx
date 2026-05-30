@@ -31,7 +31,7 @@ export function ProblemInput({ onContinue }: ProblemInputProps) {
   return (
     <div className="screen">
       <div className="screen-header">
-        <h1>FounderHub Berlin</h1>
+        <h1>GRÜNDERBOX / <span>PLATFORM</span></h1>
       </div>
       <div className="screen-content">
         <h2>What do you need help with?</h2>
